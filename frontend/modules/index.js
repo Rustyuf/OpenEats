@@ -1,5 +1,8 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './common/reducer'
 import { IntlProvider, addLocaleData } from 'react-intl'
 import { Router, Route, browserHistory, IndexRoute } from 'react-router'
 
@@ -16,6 +19,7 @@ import Footer from './base/components/Footer'
 import NotFound from './base/components/404'
 import Login from './account/components/Login'
 import News from './news/components/News'
+import {default as listv2} from './listv2/components/App'
 import Browse from './browse/components/Browse'
 import GroceryList from './list/components/GroceryList'
 import { RecipeForm } from './recipe_form/components/RecipeForm'
@@ -43,6 +47,7 @@ const routeConfig = [
       { path: 'news', component: News },
       { path: 'login', component: Login },
       { path: 'browse', component: Browse },
+      { path: 'list2', component: listv2 },
       { path: 'list', component: GroceryList, onEnter: requireAuth ,
         childRoutes: [
           { path: ':list_id', component: GroceryList, onEnter: requireAuth },
@@ -61,18 +66,22 @@ const routeConfig = [
   }
 ];
 
+let store = createStore(reducer);
+
 const main = (
-  <IntlProvider locale={ process.env.LOCALE } messages={ messages }>
-    <div>
-      <div id="content">
-        <Router
-          history={ browserHistory }
-          routes={ routeConfig }
-        />
+    <IntlProvider locale={ process.env.LOCALE } messages={ messages }>
+  <Provider store={store}>
+      <div>
+        <div id="content">
+          <Router
+            history={ browserHistory }
+            routes={ routeConfig }
+          />
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-  </IntlProvider>
+  </Provider>
+    </IntlProvider>
 );
 
 const entryPoint = () => {
