@@ -47,10 +47,14 @@ const routeConfig = [
       { path: 'news', component: News },
       { path: 'login', component: Login },
       { path: 'browse', component: Browse },
-      { path: 'list2', component: listv2 },
       { path: 'list', component: GroceryList, onEnter: requireAuth ,
         childRoutes: [
           { path: ':list_id', component: GroceryList, onEnter: requireAuth },
+        ]
+      },
+      { path: 'list2', component: listv2, onEnter: requireAuth ,
+        childRoutes: [
+          { path: ':list_id', component: listv2, onEnter: requireAuth },
         ]
       },
       { path: 'recipe',

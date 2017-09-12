@@ -1,9 +1,17 @@
 let nextTodoId = 0
-export const addTodo = (text) => ({
-  type: 'ADD_TODO',
-  id: nextTodoId++,
-  text
-})
+import ItemConstants from '../constants/ItemConstants'
+
+
+export const addTodo = (text) => {
+
+  console.log('action');
+
+  return {
+    type: ItemConstants.ITEM_ADD,
+    id: nextTodoId++,
+    text
+  }
+}
 
 export const setVisibilityFilter = (filter) => ({
   type: 'SET_VISIBILITY_FILTER',
@@ -11,6 +19,6 @@ export const setVisibilityFilter = (filter) => ({
 })
 
 export const toggleTodo = (id) => ({
-  type: 'TOGGLE_TODO',
+  type: ItemConstants.ITEM_TOGGLE,
   id
 })

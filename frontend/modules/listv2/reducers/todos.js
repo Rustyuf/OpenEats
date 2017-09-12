@@ -1,14 +1,24 @@
-import undoable from 'redux-undo'
+import ItemConstants from '../constants/ItemConstants'
 
-const todo = (state, action) => {
+const item = (state, action) => {
   switch (action.type) {
-    case 'ADD_TODO':
+    case ItemConstants.ITEM_ADD:
       return {
         id: action.id,
         text: action.text,
         completed: false
       };
-    case 'TOGGLE_TODO':
+    case ItemConstants.ITEM_SAVE:
+      if (state.id !== action.id) {
+        return state
+      }
+
+      return {
+        id: state.id,
+        text: action.text,
+        completed: state.completed
+      };
+    case ItemConstants.ITEM_TOGGLE:
       if (state.id !== action.id) {
         return state
       }
@@ -23,23 +33,21 @@ const todo = (state, action) => {
   }
 };
 
-const todos = (state = [], action) => {
+const items = (state = [], action) => {
   switch (action.type) {
-    case 'ADD_TODO':
+    case ItemConstants.ITEM_ADD:
 
       return [
         ...state,
-        todo(undefined, action)
+        item(undefined, action)
       ];
-    case 'TOGGLE_TODO':
+    case ItemConstants.ITEM_TOGGLE:
       return state.map(t =>
-        todo(t, action)
+        item(t, action)
       );
     default:
       return state
   }
 };
 
-const undoableTodos = undoable(todos);
-
-export default undoableTodos
+export default items
