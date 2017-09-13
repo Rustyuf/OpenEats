@@ -1,8 +1,9 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './common/reducer'
+import thunkMiddleware from 'redux-thunk'
 import { IntlProvider, addLocaleData } from 'react-intl'
 import { Router, Route, browserHistory, IndexRoute } from 'react-router'
 
@@ -19,7 +20,7 @@ import Footer from './base/components/Footer'
 import NotFound from './base/components/404'
 import Login from './account/components/Login'
 import News from './news/components/News'
-import {default as listv2} from './listv2/components/App'
+import {default as listv2} from './listv2/containers/App'
 import Browse from './browse/components/Browse'
 import GroceryList from './list/components/GroceryList'
 import { RecipeForm } from './recipe_form/components/RecipeForm'
@@ -54,7 +55,7 @@ const routeConfig = [
       },
       { path: 'list2', component: listv2, onEnter: requireAuth ,
         childRoutes: [
-          { path: ':list_id', component: listv2, onEnter: requireAuth },
+          { path: ':listId', component: listv2, onEnter: requireAuth },
         ]
       },
       { path: 'recipe',
@@ -70,7 +71,12 @@ const routeConfig = [
   }
 ];
 
-let store = createStore(reducer);
+let store = createStore(
+  reducer,
+  applyMiddleware(
+    thunkMiddleware, // lets us dispatch() functions
+  )
+);
 
 const main = (
     <IntlProvider locale={ process.env.LOCALE } messages={ messages }>

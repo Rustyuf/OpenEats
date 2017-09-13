@@ -1,50 +1,51 @@
 import { request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config'
 import ItemConstants from '../constants/ItemConstants';
-import { ItemStore } from '../stores/ItemStore';
 
 class ItemActions {
   load(id) {
-    request()
-      .get(serverURLs.list_item + '?list=' + id)
-      .end((err, res) => {
-        if (!err && res) {
-          return {
-            type: ItemConstants.ITEM_INIT,
-            id: id,
-            list: res.body
-          };
-        } else {
-          console.error(err.toString());
-          console.error(res.body);
-          this.error(res.body);
-        }
-      });
+    return (dispatch) => {
+      request()
+        .get(serverURLs.list_item + '?list=' + id)
+        .end((err, res) => {
+          if (!err && res) {
+            dispatch({
+              type: ItemConstants.ITEM_INIT,
+              list: res.body.results
+            });
+          } else {
+            console.error(err.toString());
+            console.error(res.body);
+          }
+        });
+    }
   }
 
-  add(title) {
-    request()
-      .post(serverURLs.list_item)
-      .send({
-        title: title,
-        // list: ItemStore.getKey()
-      })
-      .end((err, res) => {
-        if (!err && res) {
-          return {
-            type: ItemConstants.ITEM_ADD,
-            data: res.body
-          };
-          // AppDispatcher.dispatch({
-          //   actionType: ListConstants.LIST_UPDATE_COUNT,
-          //   increment: 1
-          // });
-        } else {
-          console.error(err.toString());
-          console.error(res.body);
-          this.error(res.body);
-        }
-      });
+  add(title, list) {
+    return (dispatch) => {
+      request()
+        .post(serverURLs.list_item)
+        .send({
+          title: title,
+          list: list
+        })
+        .end((err, res) => {
+          if (!err && res) {
+            dispatch({
+              type: ItemConstants.ITEM_ADD,
+              id: res.body.id,
+              title: res.body.title
+            });
+            // AppDispatcher.dispatch({
+            //   actionType: ListConstants.LIST_UPDATE_COUNT,
+            //   increment: 1
+            // });
+          } else {
+            console.error(err.toString());
+            console.error(res.body);
+          }
+        });
+    }
   }
 
   save(item, title) {
@@ -56,7 +57,7 @@ class ItemActions {
           return {
             type: ItemConstants.ITEM_SAVE,
             id: item.id,
-            text: res.body.title
+            title: res.body.title
           };
         } else {
           console.error(err.toString());
@@ -87,7 +88,8 @@ class ItemActions {
   toggleAll(checked) {
     request()
       .patch(serverURLs.bulk_list_item)
-      .send(ItemStore.getToogleItems(checked))
+      // .send(ItemStore.getToogleItems(checked))
+      .send(1)
       .end((err, res) => {
         if (!err && res) {
           return {
@@ -124,7 +126,7 @@ class ItemActions {
   }
 
   clearCompleted() {
-    var ids = ItemStore.getCheckedItems();
+    var ids = 1;
     request()
       .delete(serverURLs.bulk_list_item)
       .send(ids)

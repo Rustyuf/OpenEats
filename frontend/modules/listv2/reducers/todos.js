@@ -2,10 +2,16 @@ import ItemConstants from '../constants/ItemConstants'
 
 const item = (state, action) => {
   switch (action.type) {
+    case ItemConstants.ITEM_INIT:
+      return {
+        id: action.id,
+        title: action.title,
+        completed: false
+      };
     case ItemConstants.ITEM_ADD:
       return {
         id: action.id,
-        text: action.text,
+        title: action.title,
         completed: false
       };
     case ItemConstants.ITEM_SAVE:
@@ -15,7 +21,7 @@ const item = (state, action) => {
 
       return {
         id: state.id,
-        text: action.text,
+        title: action.title,
         completed: state.completed
       };
     case ItemConstants.ITEM_TOGGLE:
@@ -25,7 +31,7 @@ const item = (state, action) => {
 
       return {
         id: state.id,
-        text: state.text,
+        title: state.title,
         completed: !state.completed
       };
     default:
@@ -35,8 +41,24 @@ const item = (state, action) => {
 
 const items = (state = [], action) => {
   switch (action.type) {
-    case ItemConstants.ITEM_ADD:
+    case ItemConstants.ITEM_INIT:
+      let items = action.list.map(itemi => {
+        return item(
+          undefined,
+          {
+            type: ItemConstants.ITEM_INIT,
+            id: itemi.id,
+            title: itemi.title,
+            completed: itemi.completed
+          }
+        )
+      });
 
+      return [
+        ...state,
+        ...items
+      ];
+    case ItemConstants.ITEM_ADD:
       return [
         ...state,
         item(undefined, action)

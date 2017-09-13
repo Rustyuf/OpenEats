@@ -45,6 +45,7 @@
     "react-smooth-collapse": "^1.1.1",
     "react-spinkit": "^2.1.1",
     "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "superagent": "^2.3.0",
     "superagent-defaults": "^0.1.14",
     "url-loader": "^0.5.7"
