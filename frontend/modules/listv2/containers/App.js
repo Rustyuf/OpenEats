@@ -1,8 +1,8 @@
 import React from 'react'
 import Footer from '../components/Footer'
-import AddTodo from './AddTodo'
+import AddItem from './AddItem'
 import { connect } from 'react-redux'
-import VisibleTodoList from './VisibleTodoList'
+import VisibleItems from './VisibleItems'
 import ItemActions from '../actions/ItemActions'
 
 let App = ({ dispatch, params }) => {
@@ -10,8 +10,8 @@ let App = ({ dispatch, params }) => {
 
   return (
     <div>
-      <AddTodo/>
-      <VisibleTodoList list={ params.listId || 0 }/>
+      <AddItem/>
+      <VisibleItems list={ params.listId || 0 }/>
       <Footer/>
     </div>
   )

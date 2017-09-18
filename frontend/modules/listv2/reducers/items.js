@@ -4,9 +4,7 @@ const item = (state, action) => {
   switch (action.type) {
     case ItemConstants.ITEM_INIT:
       return {
-        id: action.id,
-        title: action.title,
-        completed: false
+        ...action
       };
     case ItemConstants.ITEM_ADD:
       return {
@@ -30,8 +28,7 @@ const item = (state, action) => {
       }
 
       return {
-        id: state.id,
-        title: state.title,
+        ...state,
         completed: !state.completed
       };
     default:
@@ -42,14 +39,12 @@ const item = (state, action) => {
 const items = (state = [], action) => {
   switch (action.type) {
     case ItemConstants.ITEM_INIT:
-      let items = action.list.map(itemi => {
+      let items = action.list.map(listItem => {
         return item(
           undefined,
           {
             type: ItemConstants.ITEM_INIT,
-            id: itemi.id,
-            title: itemi.title,
-            completed: itemi.completed
+            ...listItem
           }
         )
       });
@@ -67,6 +62,8 @@ const items = (state = [], action) => {
       return state.map(t =>
         item(t, action)
       );
+    case ItemConstants.ITEM_DELETE:
+      return state.filter(t => t.id !== action.id);
     default:
       return state
   }
