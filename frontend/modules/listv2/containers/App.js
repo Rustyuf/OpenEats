@@ -9,16 +9,7 @@ import GroceryList from '../components/GroceryList'
 import * as ItemActions from '../actions/ItemActions'
 import * as ListActions from '../actions/ListActions'
 
-let App = ({ dispatch, params, items, lists, listActions, itemActions }) => {
-  if (!(items.length > 0)) {
-    console.log('items')
-    dispatch(ItemActions.load(params.listId));
-  }
-  if (!(lists.length > 0)) {
-    console.log('list')
-    dispatch(ListActions.init());
-  }
-
+let App = ({ params, items, lists, listActions, itemActions }) => {
   return (
     <div>
       <GroceryList
@@ -31,12 +22,13 @@ let App = ({ dispatch, params, items, lists, listActions, itemActions }) => {
     </div>
 )};
 
-// App.propTypes = {
-//   items: PropTypes.array.isRequired,
-//   lists: PropTypes.array.isRequired,
-//   listActions: PropTypes.object.isRequired,
-//   itemActions: PropTypes.object.isRequired
-// };
+App.propTypes = {
+  items: PropTypes.array.isRequired,
+  lists: PropTypes.array.isRequired,
+  params: PropTypes.object.isRequired,
+  listActions: PropTypes.object.isRequired,
+  itemActions: PropTypes.object.isRequired
+};
 
 const mapStateToProps = state => ({
   items: state.list.items,
@@ -46,13 +38,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   listActions: bindActionCreators(ListActions, dispatch),
   itemActions: bindActionCreators(ItemActions, dispatch),
-  dispatch
 });
 
-// App = connect()(App);
-//
-// export default App
-//
 export default connect(
   mapStateToProps,
   mapDispatchToProps

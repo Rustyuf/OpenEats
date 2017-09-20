@@ -1,8 +1,6 @@
 import React from 'react'
 import { injectIntl, defineMessages } from 'react-intl'
 
-// import { ListStore, CHANGE_EVENT, INIT_EVENT  } from '../stores/ListStore'
-
 import ListContainer from './ListContainer'
 import MyLists from './MyLists'
 import ListHeader from './ListHeader'
@@ -20,10 +18,10 @@ export default injectIntl(React.createClass({
   //   };
   // },
 
-  // componentDidMount: function() {
-  //   this.props.listActions.init(this.props.params.active);
-  // },
-  //
+  componentDidMount: function() {
+    this.props.listActions.init();
+  },
+
   // componentWillReceiveProps(nextProps) {
   //   this.props.listActions.init(nextProps.params.active);
   // },

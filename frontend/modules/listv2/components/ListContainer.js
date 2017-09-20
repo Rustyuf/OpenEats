@@ -1,8 +1,6 @@
 import React from 'react'
 import { injectIntl, defineMessages } from 'react-intl'
 
-// import ItemAction from '../actions/ItemActions'
-// import { ItemStore, CHANGE_EVENT, INIT_EVENT } from '../stores/ItemStore'
 import ListFooter from './ListFooter'
 import ListItem from './ListItem'
 
@@ -22,13 +20,11 @@ export default injectIntl(React.createClass({
     };
   },
 
-  // componentDidMount: function () {
-  //   if (this.props.list_id != null) {
-  //     ItemAction.load_list(this.props.list_id);
-  //   }
-  //   ItemStore.addChangeListener(INIT_EVENT, this._onChange);
-  //   ItemStore.addChangeListener(CHANGE_EVENT, this._onChange);
-  // },
+  componentDidMount: function () {
+    if (this.props.list_id !== null) {
+      this.props.itemActions.load(this.props.list_id);
+    }
+  },
 
   // componentWillReceiveProps: function (nextProps) {
   //   if (nextProps.list_id != this.props.list_id) {

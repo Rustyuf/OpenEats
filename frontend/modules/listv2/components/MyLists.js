@@ -1,13 +1,11 @@
+"use strict";
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
-import {
-  injectIntl,
-  defineMessages,
-  FormattedMessage
-} from 'react-intl'
+import { injectIntl, defineMessages } from 'react-intl'
 
-const MyLists = ({title, lists}) => {
+const MyLists = ({title, lists, intl}) => {
   const messages = defineMessages({
     no_lists: {
       id: 'my_lists.no_lists',
@@ -29,7 +27,7 @@ const MyLists = ({title, lists}) => {
           { title }
         </a>
         <a href="#" className="list-group-item disabled">
-          <FormattedMessage {...messages.no_lists}/>
+          { intl.formatMessage(messages.no_lists) }
         </a>
       </ul>
     </div>
@@ -59,7 +57,7 @@ const MyLists = ({title, lists}) => {
         </a>
         { items }
         <Link to={ '/list/' } className="list-group-item">
-          <FormattedMessage {...messages.new_list}/>
+          { intl.formatMessage(messages.new_list) }
         </Link>
       </ul>
     </div>
@@ -68,6 +66,7 @@ const MyLists = ({title, lists}) => {
 
 MyLists.propTypes = {
   title: PropTypes.string.isRequired,
+  intl: PropTypes.object.isRequired,
   lists: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,

@@ -3,31 +3,33 @@ import { injectIntl, defineMessages } from 'react-intl'
 
 import { ENTER_KEY } from '../constants/ListStatus'
 
-export default injectIntl(React.createClass({
-  getInitialState: function() {
-    return {
+class NewList extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       value: this.props.value || '',
     };
-  },
+  }
 
-  handleChange: function (event) {
+  handleChange = (event) => {
     this.setState({value: event.target.value});
-  },
+  };
 
-  handleKeyDown: function (event) {
+  handleKeyDown = (event) => {
     if (event.which === ENTER_KEY) {
       this.handleSubmit(event);
     }
-  },
+  };
 
-  handleSubmit: function (event) {
-    var val = this.state.value.trim();
+  handleSubmit = () => {
+    let val = this.state.value.trim();
     if (val) {
       this.props.addList(val);
     }
-  },
+  };
 
-  render: function() {
+  render() {
     const { formatMessage } = this.props.intl;
     const messages = defineMessages({
       header: {
@@ -68,5 +70,7 @@ export default injectIntl(React.createClass({
         >{ formatMessage(messages.button) }</button>
       </div>
     )
-  }
-}));
+  };
+}
+
+export default injectIntl(NewList)
