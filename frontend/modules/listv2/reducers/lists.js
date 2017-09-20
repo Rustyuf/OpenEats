@@ -29,7 +29,6 @@ const lists = (state = [], action) => {
   switch (action.type) {
     case ListConstants.LIST_INIT:
       let lists = action.lists.map(groceryList => {
-        console.log(groceryList);
         return list(
           undefined,
           {

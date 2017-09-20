@@ -3,10 +3,10 @@ import { injectIntl, defineMessages } from 'react-intl'
 
 // import { ListStore, CHANGE_EVENT, INIT_EVENT  } from '../stores/ListStore'
 
-import ListContainer from '../../list/components/ListContainer'
-import MyLists from '../../list/components/MyLists'
-import ListHeader from '../../list/components/ListHeader'
-import NewList from '../../list/components/NewList'
+import ListContainer from './ListContainer'
+import MyLists from './MyLists'
+import ListHeader from './ListHeader'
+import NewList from './NewList'
 
 require("./../css/grocery_list.scss");
 
@@ -95,7 +95,7 @@ export default injectIntl(React.createClass({
         <div className="row">
           { render_list }
           <div className="col-md-3">
-            <MyLists title={ formatMessage(messages.my_lists) } data={ this.props.lists }/>
+            <MyLists title={ formatMessage(messages.my_lists) } lists={ this.props.lists }/>
           </div>
         </div>
       </div>
