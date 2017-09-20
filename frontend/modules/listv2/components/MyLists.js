@@ -1,8 +1,13 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
-import { injectIntl, defineMessages, FormattedMessage } from 'react-intl'
+import {
+  injectIntl,
+  defineMessages,
+  FormattedMessage
+} from 'react-intl'
 
-let MyLists = ({title, lists}) => {
+const MyLists = ({title, lists}) => {
   const messages = defineMessages({
     no_lists: {
       id: 'my_lists.no_lists',
@@ -34,7 +39,12 @@ let MyLists = ({title, lists}) => {
   let items = lists.map(function(item) {
     let link = '/list/' + item.id;
     return (
-      <Link to={ link } className="list-group-item" activeClassName="active" key={ item.id }>
+      <Link
+        to={ link }
+        className="list-group-item"
+        activeClassName="active"
+        key={ item.id }
+      >
         <span className="badge">{ item.item_count }</span>
         { item.title }
       </Link>
@@ -54,6 +64,15 @@ let MyLists = ({title, lists}) => {
       </ul>
     </div>
   );
+};
+
+MyLists.propTypes = {
+  title: PropTypes.string.isRequired,
+  lists: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    item_count: PropTypes.number.isRequired
+  }).isRequired).isRequired,
 };
 
 export default injectIntl(MyLists)
