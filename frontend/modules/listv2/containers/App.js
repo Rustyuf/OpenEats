@@ -1,22 +1,59 @@
-import React from 'react'
-import Footer from '../components/Footer'
-import AddItem from './AddItem'
-import { connect } from 'react-redux'
-import VisibleItems from './VisibleItems'
-import ItemActions from '../actions/ItemActions'
+"use strict";
 
-let App = ({ dispatch, params }) => {
-  dispatch(ItemActions.load(params.listId));
+import React from 'react'
+import PropTypes from 'prop-types'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+
+import GroceryList from '../components/GroceryList'
+import * as ItemActions from '../actions/ItemActions'
+import * as ListActions from '../actions/ListActions'
+
+let App = ({ dispatch, params, items, lists, listActions, itemActions }) => {
+  if (!(items.length > 0)) {
+    console.log('items')
+    dispatch(ItemActions.load(params.listId));
+  }
+  if (!(lists.length > 0)) {
+    console.log('list')
+    dispatch(ListActions.init());
+  }
 
   return (
     <div>
-      <AddItem/>
-      <VisibleItems list={ params.listId || 0 }/>
-      <Footer/>
+      <GroceryList
+        items={ items }
+        lists={ lists }
+        active_list_id={ params.listId }
+        listActions={ listActions }
+        itemActions={ itemActions }
+      />
     </div>
-  )
-};
+)};
 
-App = connect()(App);
+// App.propTypes = {
+//   items: PropTypes.array.isRequired,
+//   lists: PropTypes.array.isRequired,
+//   listActions: PropTypes.object.isRequired,
+//   itemActions: PropTypes.object.isRequired
+// };
 
-export default App
+const mapStateToProps = state => ({
+  items: state.list.items,
+  lists: state.list.lists,
+});
+
+const mapDispatchToProps = dispatch => ({
+  listActions: bindActionCreators(ListActions, dispatch),
+  itemActions: bindActionCreators(ItemActions, dispatch),
+  dispatch
+});
+
+// App = connect()(App);
+//
+// export default App
+//
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import items from './items'
-import visibilityFilter from './visibilityFilter'
+import lists from './lists'
 
 const list = combineReducers({
   items,
-  visibilityFilter
+  lists
 });
 
 export default list
