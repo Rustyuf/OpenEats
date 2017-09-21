@@ -143,11 +143,11 @@ export default injectIntl(React.createClass({
     if (activeListCount || completedCount) {
       footer =
         <ListFooter
-          count={ activeListCount }
+          itemCount={ activeListCount }
           completedCount={ completedCount }
-          nowShowing={ this.state.nowShowing }
+          activeFilter={ this.state.nowShowing }
           onClearCompleted={ this.clearCompleted }
-          filter_status={ this.filter_status }
+          onFilterStatus={ this.filter_status }
         />;
     }
 
