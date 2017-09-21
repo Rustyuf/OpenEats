@@ -11,15 +11,13 @@ import * as ListActions from '../actions/ListActions'
 
 let App = ({ params, items, lists, listActions, itemActions }) => {
   return (
-    <div>
-      <GroceryList
-        items={ items }
-        lists={ lists }
-        active_list_id={ params.listId }
-        listActions={ listActions }
-        itemActions={ itemActions }
-      />
-    </div>
+    <GroceryList
+      items={ items }
+      lists={ lists }
+      active_list_id={ params.listId }
+      listActions={ listActions }
+      itemActions={ itemActions }
+    />
 )};
 
 App.propTypes = {

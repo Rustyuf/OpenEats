@@ -1,12 +1,12 @@
 import React from 'react'
 
-import Nav from '../../header/components/Nav'
+import NavBar from '../../header/containers/NavBar'
 
 export default React.createClass({
   render: function() {
     return (
       <div className="react">
-        <Nav />
+        <NavBar />
         {this.props.children}
       </div>
     );
