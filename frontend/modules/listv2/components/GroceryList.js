@@ -67,7 +67,7 @@ export default injectIntl(React.createClass({
         <div className="col-md-9">
           <div className="grocery-list">
             <ListHeader
-              title={ this.props.active_list_name }
+              title={ this.props.active_list_id }
               updateList = { this.updateList }
               removeList = { this.removeList }
             />
