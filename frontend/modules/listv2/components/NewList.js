@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { injectIntl, defineMessages } from 'react-intl'
 
 import { ENTER_KEY } from '../constants/ListStatus'
@@ -8,12 +9,12 @@ class NewList extends React.Component {
     super(props);
 
     this.state = {
-      value: this.props.value || '',
+      title: this.props.title || '',
     };
   }
 
   handleChange = (event) => {
-    this.setState({value: event.target.value});
+    this.setState({title: event.target.title});
   };
 
   handleKeyDown = (event) => {
@@ -23,7 +24,7 @@ class NewList extends React.Component {
   };
 
   handleSubmit = () => {
-    let val = this.state.value.trim();
+    let val = this.state.title.trim();
     if (val) {
       this.props.addList(val);
     }
@@ -59,7 +60,7 @@ class NewList extends React.Component {
           autoFocus="true"
           className="form-control"
           placeholder={ formatMessage(messages.placeholder) }
-          value={ this.state.value }
+          value={ this.state.title }
           onChange={ this.handleChange }
           onKeyDown={ this.handleKeyDown }
         />
@@ -72,5 +73,11 @@ class NewList extends React.Component {
     )
   };
 }
+
+NewList.propTypes = {
+  title: PropTypes.string,
+  intl: PropTypes.object.isRequired,
+  addList: PropTypes.func.isRequired,
+};
 
 export default injectIntl(NewList)
