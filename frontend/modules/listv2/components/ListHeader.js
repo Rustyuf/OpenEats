@@ -108,7 +108,9 @@ class ListHeader extends React.Component {
 }
 
 ListHeader.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  removeList: PropTypes.func.isRequired,
+  updateList: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
 };
 
