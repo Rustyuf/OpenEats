@@ -84,7 +84,7 @@ ListItem.propTypes = {
   item: PropTypes.shape({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
-    completed: PropTypes.number.isRequired
+    completed: PropTypes.bool.isRequired
   }).isRequired,
   onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,

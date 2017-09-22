@@ -62,8 +62,29 @@ const items = (state = [], action) => {
       return state.map(t =>
         item(t, action)
       );
+    case ItemConstants.ITEM_TOGGLE_ALL:
+      // TODO: FIx this mess
+      let new_State = state;
+      for (let i in action.ids) {
+        new_State = new_State.map(t =>
+          item(
+            t,
+            {
+              type: ItemConstants.ITEM_TOGGLE,
+              id: action.ids[i].id,
+            }
+          )
+        );
+      }
+      return new_State;
     case ItemConstants.ITEM_DELETE:
       return state.filter(t => t.id !== action.id);
+    case ItemConstants.ITEM_DELETE_COMPLETED:
+      let newState = state;
+      for (let i in action.ids) {
+        newState = newState.filter(t => t.id !== action.ids[i]);
+      }
+      return newState;
     default:
       return state
   }

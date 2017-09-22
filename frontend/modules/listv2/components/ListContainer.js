@@ -55,7 +55,7 @@ export default injectIntl(React.createClass({
     var val = this.state.newItem.trim();
 
     if (val) {
-      this.props.itemActions.addItem(val);
+      this.props.itemActions.add(val, this.props.list_id);
       this.setState({newItem: ''});
     }
   },
@@ -83,15 +83,38 @@ export default injectIntl(React.createClass({
 
   toggleAll: function (event) {
     var checked = event.target.checked;
-    this.props.itemActions.toggleAll(checked);
+    this.props.itemActions.toggleAll(this.getToogleItems(checked));
   },
 
   destroy: function (item) {
     this.props.itemActions.destroy(item);
   },
 
+  getCheckedItems: function () {
+    return this.props.items.reduce(function (list, item) {
+      if (item.completed === true) {
+        list.push(item.id);
+      }
+      return list;
+    }, []);
+  },
+
+  getToogleItems: function (checked) {
+    return this.props.items.reduce(function (list, item) {
+      if (item.completed !== checked) {
+        list.push({
+          id: item.id,
+          completed: checked
+        });
+      }
+      return list;
+    }, []);
+  },
+
   clearCompleted: function () {
-    this.props.itemActions.clearCompleted();
+    this.props.itemActions.clearCompleted(
+      this.getCheckedItems()
+    );
   },
 
   render: function () {

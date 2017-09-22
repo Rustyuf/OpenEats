@@ -8,7 +8,6 @@ export const load = (list) => {
       .get(serverURLs.list_item + '?list=' + list)
       .end((err, res) => {
         if (!err && res) {
-          console.log(res.body.results);
           dispatch({
             type: ItemConstants.ITEM_INIT,
             list: res.body.results
@@ -83,27 +82,27 @@ export const toggle = (item) => {
   }
 };
 
-export const toggleAll = (checked) => {
-  request()
-    .patch(serverURLs.bulk_list_item)
-    // .send(ItemStore.getToogleItems(checked))
-    .send(1)
-    .end((err, res) => {
-      if (!err && res) {
-        return {
-          type: ItemConstants.ITEM_TOGGLE_ALL,
-          checked: checked
-        };
-      } else {
-        console.error(err.toString());
-        console.error(res.body);
-      }
-    });
+export const toggleAll = (ids) => {
+  return (dispatch) => {
+    request()
+      .patch(serverURLs.bulk_list_item)
+      .send(ids)
+      .end((err, res) => {
+        if (!err && res) {
+          dispatch({
+            type: ItemConstants.ITEM_TOGGLE_ALL,
+            ids: ids
+          });
+        } else {
+          console.error(err.toString());
+          console.error(res.body);
+        }
+      });
+  }
 };
 
 export const destroy = (item) => {
   return (dispatch) => {
-    console.log(dispatch);
     request()
       .delete(serverURLs.list_item + item.id + "/")
       .end((err, res) => {
@@ -121,17 +120,20 @@ export const destroy = (item) => {
 };
 
 export const clearCompleted = (ids) => {
-  request()
-    .delete(serverURLs.bulk_list_item)
-    .send(ids)
-    .end((err, res) => {
-      if (!err && res) {
-        return {
-          type: ItemConstants.ITEM_DELETE_COMPLETED,
-        };
-      } else {
-        console.error(err.toString());
-        console.error(res.body);
-      }
-    });
+  return (dispatch) => {
+    request()
+      .delete(serverURLs.bulk_list_item)
+      .send(ids)
+      .end((err, res) => {
+        if (!err && res) {
+          dispatch({
+            type: ItemConstants.ITEM_DELETE_COMPLETED,
+            ids: ids,
+          });
+        } else {
+          console.error(err.toString());
+          console.error(res.body);
+        }
+      });
+  }
 };
