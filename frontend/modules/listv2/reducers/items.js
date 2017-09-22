@@ -57,6 +57,10 @@ const items = (state = [], action) => {
         ...state,
         item(undefined, action)
       ];
+    case ItemConstants.ITEM_SAVE:
+      return state.map(t =>
+        item(t, action)
+      );
     case ItemConstants.ITEM_TOGGLE:
       return state.map(t =>
         item(t, action)
