@@ -50,7 +50,6 @@ const items = (state = [], action) => {
       });
 
       return [
-        ...state,
         ...items
       ];
     case ItemConstants.ITEM_ADD:

@@ -39,7 +39,6 @@ const lists = (state = [], action) => {
       });
 
       return [
-        ...state,
         ...lists
       ];
     case ListConstants.LIST_ADD:
