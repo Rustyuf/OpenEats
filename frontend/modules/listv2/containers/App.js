@@ -14,7 +14,7 @@ let App = ({ params, items, lists, listActions, itemActions }) => {
     <GroceryList
       items={ items }
       lists={ lists }
-      active_list_id={ params.listId }
+      activeListID={ params.listId }
       listActions={ listActions }
       itemActions={ itemActions }
     />

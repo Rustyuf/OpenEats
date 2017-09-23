@@ -1,3 +1,5 @@
+"use strict";
+
 import React from 'react'
 import { injectIntl, defineMessages } from 'react-intl'
 
@@ -11,95 +13,80 @@ import {
   ENTER_KEY
 } from '../constants/ListStatus'
 
-export default injectIntl(React.createClass({
-  getInitialState: function () {
-    return {
+class ListContainer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       nowShowing: ALL_ITEMS,
       editing: null,
       newItem: '',
     };
-  },
+  }
 
-  componentDidMount: function () {
-    if (this.props.list_id !== null) {
-      this.props.itemActions.load(this.props.list_id);
+  componentDidMount() {
+    if (this.props.activeListID !== null) {
+      this.props.itemActions.load(this.props.activeListID);
     }
-  },
+  }
 
-  // componentWillReceiveProps: function (nextProps) {
-  //   if (nextProps.list_id != this.props.list_id) {
-  //     ItemAction.load_list(nextProps.list_id);
-  //   }
-  // },
-
-  // componentWillUnmount: function() {
-  //   ItemStore.removeChangeListener(INIT_EVENT, this._onChange);
-  //   ItemStore.removeChangeListener(CHANGE_EVENT, this._onChange);
-  // },
-
-  // _onChange: function () {
-  //   this.setState({items: ItemStore.getItems()});
-  // },
-
-  handleChange: function (event) {
+  handleChange = (event) => {
     this.setState({newItem: event.target.value});
-  },
+  };
 
-  handleNewListKeyDown: function (event) {
+  handleNewListKeyDown = (event) => {
+    event.preventDefault();
     if (event.keyCode !== ENTER_KEY) {
       return;
     }
-
-    event.preventDefault();
-
-    var val = this.state.newItem.trim();
-
+    let val = this.state.newItem.trim();
     if (val) {
-      this.props.itemActions.add(val, this.props.list_id);
+      this.props.itemActions.add(val, this.props.activeListID);
       this.setState({newItem: ''});
     }
-  },
+  };
 
-  edit: function (item) {
+  edit = (item) =>  {
     this.setState({editing: item.id});
-  },
+  };
 
-  save: function (itemToSave, text) {
+  save = (itemToSave, text) => {
     this.props.itemActions.save(itemToSave, text);
     this.setState({editing: null});
-  },
+  };
 
-  cancel: function () {
+  cancel = () =>  {
     this.setState({editing: null});
-  },
+  };
 
-  filter_status: function (status) {
+  filterStatus = (status) =>  {
     this.setState({nowShowing: status});
-  },
+  };
 
-  toggle: function (itemToToggle) {
+  toggle = (itemToToggle) =>  {
     this.props.itemActions.toggle(itemToToggle);
-  },
+  };
 
-  toggleAll: function (event) {
-    var checked = event.target.checked;
-    this.props.itemActions.toggleAll(this.getToogleItems(checked));
-  },
+  toggleAll = (event) => {
+    this.props.itemActions.toggleAll(
+      this.getToogleItems(event.target.checked)
+    );
+  };
 
-  destroy: function (item) {
+  destroy = (item) => {
     this.props.itemActions.destroy(item);
-  },
+  };
 
-  getCheckedItems: function () {
+  getCheckedItems = () => {
     return this.props.items.reduce(function (list, item) {
       if (item.completed === true) {
         list.push(item.id);
       }
       return list;
     }, []);
-  },
+  };
 
-  getToogleItems: function (checked) {
+  getToogleItems = (checked) =>  {
     return this.props.items.reduce(function (list, item) {
       if (item.completed !== checked) {
         list.push({
@@ -109,15 +96,15 @@ export default injectIntl(React.createClass({
       }
       return list;
     }, []);
-  },
+  };
 
-  clearCompleted: function () {
+  clearCompleted = () => {
     this.props.itemActions.clearCompleted(
       this.getCheckedItems()
     );
-  },
+  };
 
-  render: function () {
+  render() {
     const { formatMessage } = this.props.intl;
     const messages = defineMessages({
       item: {
@@ -127,11 +114,11 @@ export default injectIntl(React.createClass({
       },
     });
 
-    var footer;
-    var main;
-    var items = this.props.items;
+    let footer;
+    let main;
+    let items = this.props.items;
 
-    var shownItems = items.filter(function (item) {
+    let shownItems = items.filter(function (item) {
       switch (this.state.nowShowing) {
       case ACTIVE_ITEMS:
         return !item.completed;
@@ -142,7 +129,7 @@ export default injectIntl(React.createClass({
       }
     }, this);
 
-    var listItems = shownItems.map(function (item) {
+    let listItems = shownItems.map(function (item) {
       return (
         <ListItem
           key={ item.id }
@@ -157,11 +144,11 @@ export default injectIntl(React.createClass({
       );
     }, this);
 
-    var activeListCount = items.reduce(function (accum, item) {
+    let activeListCount = items.reduce(function (accum, item) {
       return item.completed ? accum : accum + 1;
     }, 0);
 
-    var completedCount = items.length - activeListCount;
+    let completedCount = items.length - activeListCount;
 
     if (activeListCount || completedCount) {
       footer =
@@ -170,7 +157,7 @@ export default injectIntl(React.createClass({
           completedCount={ completedCount }
           activeFilter={ this.state.nowShowing }
           onClearCompleted={ this.clearCompleted }
-          onFilterStatus={ this.filter_status }
+          onFilterStatus={ this.filterStatus }
         />;
     }
 
@@ -207,4 +194,6 @@ export default injectIntl(React.createClass({
       </div>
     );
   }
-}));
+}
+
+export default injectIntl(ListContainer)

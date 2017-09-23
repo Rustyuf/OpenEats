@@ -15,21 +15,21 @@ class ListHeader extends React.Component {
     super(props);
 
     this.state = {
-      title: this.props.title || '',
+      title: this.props.list.title || '',
       editing: false,
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      title: nextProps.title,
+      title: nextProps.list.title,
       editing: false,
     });
   }
 
   handleDelete = (message) => {
     if (confirm(message)) {
-      this.props.removeList()
+      this.props.removeList(this.props.list.id)
     }
   };
 
@@ -46,7 +46,7 @@ class ListHeader extends React.Component {
   handleKeyDown = (event) => {
     if (event.which === ESCAPE_KEY) {
       this.setState({
-        title: this.props.title,
+        title: this.props.list.title,
         editing: false,
       });
     } else if (event.which === ENTER_KEY) {
@@ -54,17 +54,17 @@ class ListHeader extends React.Component {
     }
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = () => {
     let val = this.state.title.trim();
     if (val) {
-      this.props.updateList(val);
+      this.props.updateList(this.props.list.id, val);
       this.setState({
-        editText: val,
+        title: val,
         editing: false,
       });
     } else {
       this.setState({
-        editText: this.props.title,
+        title: this.props.list.title,
         editing: false,
       });
     }
@@ -108,7 +108,11 @@ class ListHeader extends React.Component {
 }
 
 ListHeader.propTypes = {
-  title: PropTypes.string.isRequired,
+  list: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    item_count: PropTypes.number.isRequired
+  }).isRequired,
   removeList: PropTypes.func.isRequired,
   updateList: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,

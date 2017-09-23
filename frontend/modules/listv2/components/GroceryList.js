@@ -1,3 +1,5 @@
+"use strict";
+
 import React from 'react'
 import { injectIntl, defineMessages } from 'react-intl'
 
@@ -8,45 +10,16 @@ import NewList from './NewList'
 
 require("./../css/grocery_list.scss");
 
-export default injectIntl(React.createClass({
+class GroceryList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-  // getInitialState: function() {
-  //   return {
-  //     lists: this.props.lists || null,
-  //     active_list_id: this.props.active || null,
-  //     active_list_name: '' || null,
-  //   };
-  // },
-
-  componentDidMount: function() {
+  componentDidMount() {
     this.props.listActions.load();
-  },
+  }
 
-  // componentWillReceiveProps(nextProps) {
-  //   this.props.listActions.init(nextProps.params.active);
-  // },
-
-  // _onChange: function() {
-  //   this.setState({
-  //     lists: ListStore.get_lists() || null,
-  //     active_list_id: ListStore.get_id() || null,
-  //     active_list_name: ListStore.get_name() || null,
-  //   });
-  // },
-
-  addList: function(title) {
-    this.props.listActions.add(title);
-  },
-
-  updateList: function(title) {
-    this.props.listActions.save(this.props.active_list_id, title);
-  },
-
-  removeList: function() {
-    this.props.listActions.destroy(this.props.active_list_id);
-  },
-
-  render: function() {
+  render() {
     const { formatMessage } = this.props.intl;
     const messages = defineMessages({
       my_lists: {
@@ -61,29 +34,31 @@ export default injectIntl(React.createClass({
       },
     });
 
-    let render_list = '';
-    if (this.props.active_list_id != null) {
-      render_list = (
+    let { activeListID, items, lists, listActions, itemActions } = this.props;
+
+    let renderList = '';
+    if (activeListID !== null && lists.length > 0) {
+      renderList = (
         <div className="col-md-9">
           <div className="grocery-list">
             <ListHeader
-              title={ this.props.active_list_id }
-              updateList = { this.updateList }
-              removeList = { this.removeList }
+              list={ lists.find(t => t.id == activeListID) }
+              updateList = { listActions.save }
+              removeList = { listActions.destroy }
             />
             <ListContainer
-              items={ this.props.items }
-              list_id={ this.props.active_list_id }
-              itemActions={ this.props.itemActions }
+              items={ items }
+              activeListID={ activeListID }
+              itemActions={ itemActions }
             />
           </div>
           <div className="list-info-footer">{ formatMessage(messages.footer) }</div>
         </div>
       );
     } else {
-      render_list = (
+      renderList = (
         <div className="col-md-9">
-          <NewList addList={ this.addList }/>
+          <NewList addList={ listActions.add }/>
         </div>
       );
     }
@@ -91,12 +66,14 @@ export default injectIntl(React.createClass({
     return (
       <div className="container">
         <div className="row">
-          { render_list }
+          { renderList }
           <div className="col-md-3">
-            <MyLists title={ formatMessage(messages.my_lists) } lists={ this.props.lists }/>
+            <MyLists title={ formatMessage(messages.my_lists) } lists={ lists }/>
           </div>
         </div>
       </div>
     );
   }
-}));
+}
+
+export default injectIntl(GroceryList)

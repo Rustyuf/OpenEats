@@ -1,6 +1,7 @@
 import { request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config'
 import ListConstants from '../constants/ListConstants';
+import { browserHistory } from 'react-router'
 
 export const add = (title) => {
   return (dispatch) => {
@@ -9,15 +10,13 @@ export const add = (title) => {
       .send({title: title})
       .end((err, res) => {
         if (!err && res) {
-
-          console.log({type: ListConstants.LIST_ADD,
-            id: res.body.id,
-            title: res.body.title});
           dispatch({
             type: ListConstants.LIST_ADD,
             id: res.body.id,
-            title: res.body.title
+            title: res.body.title,
+            item_count: 0
           });
+          browserHistory.push('/list/' + res.body.id);
         } else {
           console.error(err.toString());
           console.error(res.body);
@@ -36,6 +35,7 @@ export const save = (id, title) => {
         if (!err && res) {
           dispatch({
             type: ListConstants.LIST_SAVE,
+            id: id,
             title: res.body.title
           });
         } else {
@@ -57,6 +57,7 @@ export const destroy = (id) => {
             type: ListConstants.LIST_DELETE,
             id: id,
           });
+          browserHistory.push('/list/');
         } else {
           console.error(err.toString());
           console.error(res.body);
