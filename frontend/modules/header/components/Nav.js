@@ -28,7 +28,7 @@ class NavBar extends React.Component {
   componentDidMount() {
     AuthStore.addChangeListener(this._onChange);
     if (AuthStore.isAuthenticated()) {
-      this.props.listActions.init();
+      this.props.listActions.load();
     }
   }
 
@@ -42,7 +42,7 @@ class NavBar extends React.Component {
     // If it is we need to init the list store so the menu has teh users lists.
     if (this.hasOwnProperty('state')) {
       if (!this.state.authenticated && authenticated) {
-        this.props.listActions.init()
+        this.props.listActions.load()
       }
     }
 

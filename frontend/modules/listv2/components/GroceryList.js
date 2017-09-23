@@ -19,7 +19,7 @@ export default injectIntl(React.createClass({
   // },
 
   componentDidMount: function() {
-    this.props.listActions.init();
+    this.props.listActions.load();
   },
 
   // componentWillReceiveProps(nextProps) {

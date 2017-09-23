@@ -66,28 +66,7 @@ export const destroy = (id) => {
   }
 };
 
-export const load = (id) => {
-  return (dispatch) => {
-    request()
-      .get(serverURLs.list + id + '/')
-      .end((err, res) => {
-        if (!err && res) {
-          dispatch({
-            type: ListConstants.LIST_INIT,
-            id: res.body.id,
-            title: res.body.title,
-            item_count: res.body.item_count
-          });
-        } else {
-          console.error(err.toString());
-          console.error(res.body);
-          this.error(res.body);
-        }
-      });
-  }
-};
-
-export const init = () => {
+export const load = () => {
   return (dispatch) => {
     request()
       .get(serverURLs.list)
@@ -96,7 +75,6 @@ export const init = () => {
           dispatch({
             type: ListConstants.LIST_INIT,
             lists: res.body.results,
-            // active_list_id: active_list_id,
           });
         } else {
           console.error(err.toString());
