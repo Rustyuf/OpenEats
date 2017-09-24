@@ -47,18 +47,10 @@ class ListContainer extends React.Component {
     this.setState({nowShowing: status});
   };
 
-  toggle = (itemToToggle) =>  {
-    this.props.itemActions.toggle(itemToToggle);
-  };
-
   toggleAll = (event) => {
     this.props.itemActions.toggleAll(
       this.getToogleItems(event.target.checked)
     );
-  };
-
-  destroy = (item) => {
-    this.props.itemActions.destroy(item);
   };
 
   getCheckedItems = () => {
@@ -109,8 +101,8 @@ class ListContainer extends React.Component {
         <ListItem
           key={ item.id }
           item={ item }
-          onToggle={ this.toggle.bind(this, item) }
-          onDestroy={ this.destroy.bind(this, item) }
+          onToggle={ this.props.itemActions.toggle }
+          onDestroy={ this.props.itemActions.destroy }
           onEdit={ this.edit.bind(this, item) }
           editing={ this.state.editing === item.id }
           onSave={ this.save.bind(this, item) }

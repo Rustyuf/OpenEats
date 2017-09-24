@@ -63,16 +63,16 @@ export const save = (item, title) => {
   }
 };
 
-export const toggle = (item) => {
+export const toggle = (id, completed) => {
   return (dispatch) => {
     request()
-      .patch(serverURLs.list_item + item.id + "/")
-      .send({completed: !item.completed})
+      .patch(serverURLs.list_item + id + "/")
+      .send({completed: completed})
       .end((err, res) => {
         if (!err && res) {
           dispatch({
             type: ItemConstants.ITEM_TOGGLE,
-            id: item.id,
+            id: id,
           });
         } else {
           console.error(err.toString());
@@ -101,15 +101,15 @@ export const toggleAll = (ids) => {
   }
 };
 
-export const destroy = (item) => {
+export const destroy = (id) => {
   return (dispatch) => {
     request()
-      .delete(serverURLs.list_item + item.id + "/")
+      .delete(serverURLs.list_item + id + "/")
       .end((err, res) => {
         if (!err && res) {
           dispatch({
             type: ItemConstants.ITEM_DELETE,
-            id: item.id,
+            id: id,
           });
         } else {
           console.error(err.toString());

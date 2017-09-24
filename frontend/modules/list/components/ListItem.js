@@ -25,13 +25,17 @@ class ListItem extends React.Component {
       this.props.onSave(val);
       this.setState({title: val});
     } else {
-      this.props.onDestroy();
+      this.handleDestroy();
     }
   };
 
   handleEdit = () => {
     this.props.onEdit();
     this.setState({title: this.props.item.title});
+  };
+
+  handleDestroy = () => {
+    this.props.onDestroy(this.props.item.id);
   };
 
   handleKeyDown = (event) => {
@@ -49,6 +53,13 @@ class ListItem extends React.Component {
     }
   };
 
+  handleToggle = () => {
+    this.props.onToggle(
+      this.props.item.id,
+      !this.props.item.completed
+    );
+  };
+
   render() {
     return (
       <li className={classNames({
@@ -59,21 +70,21 @@ class ListItem extends React.Component {
           <input
             className="toggle"
             type="checkbox"
-            checked={this.props.item.completed}
-            onChange={this.props.onToggle}
+            checked={ this.props.item.completed }
+            onChange={ this.handleToggle }
           />
-          <label onDoubleClick={this.handleEdit}>
-            {this.props.item.title}
+          <label onDoubleClick={ this.handleEdit }>
+            { this.props.item.title }
           </label>
-          <button className="destroy" onClick={this.props.onDestroy} />
+          <button className="destroy" onClick={ this.handleDestroy } />
         </div>
         <input
           ref="editField"
           className="edit"
-          value={this.state.title}
-          onBlur={this.handleSubmit}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeyDown}
+          value={ this.state.title }
+          onBlur={ this.handleSubmit }
+          onChange={ this.handleChange }
+          onKeyDown={ this.handleKeyDown }
         />
       </li>
     );
