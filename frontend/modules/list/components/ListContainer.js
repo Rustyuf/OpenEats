@@ -5,6 +5,7 @@ import { injectIntl, defineMessages } from 'react-intl'
 
 import ListFooter from './ListFooter'
 import ListItem from './ListItem'
+import AddItem from './AddItem'
 
 import {
   ALL_ITEMS,
@@ -20,7 +21,6 @@ class ListContainer extends React.Component {
     this.state = {
       nowShowing: ALL_ITEMS,
       editing: null,
-      newItem: '',
     };
   }
 
@@ -29,23 +29,6 @@ class ListContainer extends React.Component {
       this.props.itemActions.load(this.props.activeListID);
     }
   }
-
-  handleChange = (event) => {
-    this.setState({newItem: event.target.value});
-  };
-
-  handleNewListKeyDown = (event) => {
-    if (event.keyCode !== ENTER_KEY) {
-      return;
-    }
-
-    event.preventDefault();
-    let val = this.state.newItem.trim();
-    if (val) {
-      this.props.itemActions.add(val, this.props.activeListID);
-      this.setState({newItem: ''});
-    }
-  };
 
   edit = (item) =>  {
     this.setState({editing: item.id});
@@ -106,15 +89,6 @@ class ListContainer extends React.Component {
   };
 
   render() {
-    const { formatMessage } = this.props.intl;
-    const messages = defineMessages({
-      item: {
-        id: 'list.new-input-placeholder',
-        description: 'Placeholder for inputting new items',
-        defaultMessage: 'What do you need to buy?',
-      },
-    });
-
     let footer;
     let main;
     let items = this.props.items;
@@ -181,13 +155,9 @@ class ListContainer extends React.Component {
     return (
       <div>
         <header className="header">
-          <input
-            className="new-item"
-            placeholder={ formatMessage(messages.item) }
-            value={ this.state.newItem }
-            onKeyDown={ this.handleNewListKeyDown }
-            onChange={ this.handleChange }
-            // autoFocus={ true }
+          <AddItem
+            activeListID={ this.props.activeListID }
+            addItem={ this.props.itemActions.add }
           />
         </header>
         { main }

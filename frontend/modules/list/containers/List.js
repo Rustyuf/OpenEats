@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import GroceryList from '../components/GroceryList'
-// import * as ItemActions from '../actions/ItemActions'
 import * as ListActions from '../actions/ListActions'
 
 let List = ({ params, lists, listActions }) => {
