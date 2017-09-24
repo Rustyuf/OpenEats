@@ -3,7 +3,7 @@
 import React from 'react'
 import { injectIntl, defineMessages } from 'react-intl'
 
-import ListContainer from './ListContainer'
+import Items from '../Containers/Items'
 import MyLists from './MyLists'
 import ListHeader from './ListHeader'
 import NewList from './NewList'
@@ -34,7 +34,7 @@ class GroceryList extends React.Component {
       },
     });
 
-    let { activeListID, items, lists, listActions, itemActions } = this.props;
+    let { activeListID, lists, listActions } = this.props;
 
     let renderList = '';
     if (activeListID !== null && lists.length > 0) {
@@ -46,11 +46,7 @@ class GroceryList extends React.Component {
               updateList = { listActions.save }
               removeList = { listActions.destroy }
             />
-            <ListContainer
-              items={ items }
-              activeListID={ activeListID }
-              itemActions={ itemActions }
-            />
+            <Items activeListID={ activeListID } />
           </div>
           <div className="list-info-footer">{ formatMessage(messages.footer) }</div>
         </div>

@@ -35,10 +35,11 @@ class ListContainer extends React.Component {
   };
 
   handleNewListKeyDown = (event) => {
-    event.preventDefault();
     if (event.keyCode !== ENTER_KEY) {
       return;
     }
+
+    event.preventDefault();
     let val = this.state.newItem.trim();
     if (val) {
       this.props.itemActions.add(val, this.props.activeListID);
@@ -186,7 +187,7 @@ class ListContainer extends React.Component {
             value={ this.state.newItem }
             onKeyDown={ this.handleNewListKeyDown }
             onChange={ this.handleChange }
-            autoFocus={ true }
+            // autoFocus={ true }
           />
         </header>
         { main }
