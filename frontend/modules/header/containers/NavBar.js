@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
 import Nav from '../components/Nav'
-import * as ListActions from '../../listv2/actions/ListActions'
+import * as ListActions from '../../list/actions/ListActions'
 
 let NavBar = ({ lists, listActions }) => {
   return (

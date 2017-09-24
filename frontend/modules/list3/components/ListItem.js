@@ -1,55 +1,47 @@
-"use strict";
-
 import React from 'react'
-import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { injectIntl, defineMessages } from 'react-intl'
 
 import {
   ENTER_KEY,
   ESCAPE_KEY
 } from '../constants/ListStatus'
 
-class ListItem extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      title: this.props.item.title
-    };
-  }
-
-  handleSubmit = (event) => {
-    let val = this.state.title.trim();
+export default React.createClass({
+  handleSubmit: function (event) {
+    var val = this.state.editText.trim();
     if (val) {
       this.props.onSave(val);
-      this.setState({title: val});
+      this.setState({editText: val});
     } else {
       this.props.onDestroy();
     }
-  };
+  },
 
-  handleEdit = () => {
+  handleEdit: function () {
     this.props.onEdit();
-    this.setState({title: this.props.item.title});
-  };
+    this.setState({editText: this.props.item.title});
+  },
 
-  handleKeyDown = (event) => {
+  handleKeyDown: function (event) {
     if (event.which === ESCAPE_KEY) {
-      this.setState({title: this.props.item.title});
+      this.setState({editText: this.props.item.title});
       this.props.onCancel(event);
     } else if (event.which === ENTER_KEY) {
       this.handleSubmit(event);
     }
-  };
+  },
 
-  handleChange = (event) => {
+  handleChange: function (event) {
     if (this.props.editing) {
-      this.setState({title: event.target.value});
+      this.setState({editText: event.target.value});
     }
-  };
+  },
 
-  render() {
+  getInitialState: function () {
+    return {editText: this.props.item.title};
+  },
+
+  render: function () {
     return (
       <li className={classNames({
         completed: this.props.item.completed,
@@ -70,7 +62,7 @@ class ListItem extends React.Component {
         <input
           ref="editField"
           className="edit"
-          value={this.state.title}
+          value={this.state.editText}
           onBlur={this.handleSubmit}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
@@ -78,19 +70,4 @@ class ListItem extends React.Component {
       </li>
     );
   }
-}
-
-ListItem.propTypes = {
-  item: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired
-  }).isRequired,
-  onSave: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onDestroy: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
-};
-
-export default injectIntl(ListItem)
+});

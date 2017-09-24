@@ -1,193 +1,139 @@
 import { request } from '../../common/CustomSuperagent';
-import AppDispatcher from '../../common/AppDispatcher';
-import { ItemStore } from '../stores/ItemStore';
-import ItemConstants from '../constants/ItemConstants';
-import ListConstants from '../constants/ListConstants';
 import { serverURLs } from '../../common/config'
+import ItemConstants from '../constants/ItemConstants';
 
-class ItemActions {
-  load_list(id) {
+export const load = (list) => {
+  return (dispatch) => {
     request()
-      .get(serverURLs.list_item + '?list=' + id)
+      .get(serverURLs.list_item + '?list=' + list)
       .end((err, res) => {
         if (!err && res) {
-          this.init(id, res.body);
+          dispatch({
+            type: ItemConstants.ITEM_INIT,
+            list: res.body.results
+          });
         } else {
           console.error(err.toString());
           console.error(res.body);
-          this.error(res.body);
         }
       });
   }
+};
 
-  save_list(data) {
-    let r = 'id' in data ?
-      request().put(serverURLs.list + data.id + '/') :
-      request().post(serverURLs.list) ;
-
-    r.send(data)
-      .end((err, res) => {
-        if (!err && res) {
-          var id = res.body.id;
-          this.handleSubmit(res.body.id);
-        } else {
-          console.error(err.toString());
-          console.error(res.body);
-          this.error(res.body);
-        }
-      });
-  }
-
-  save_item(data) {
-    let r = 'id' in data ?
-      request().put(serverURLs.list_item + data.id + '/') :
-      request().post(serverURLs.list_item) ;
-
-    r.send(data)
-      .end((err, res) => {
-        if (!err && res) {
-          var id = res.body.id;
-          this.handleSubmit(res.body.id);
-        } else {
-          console.error(err.toString());
-          console.error(res.body);
-          this.error(res.body);
-        }
-      });
-  }
-
-  addItem(title) {
+export const add = (title, list) => {
+  return (dispatch) => {
     request()
       .post(serverURLs.list_item)
       .send({
         title: title,
-        list: ItemStore.getKey()
+        list: list
       })
       .end((err, res) => {
         if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ItemConstants.ITEM_ADD,
-            data: res.body
-          });
-          AppDispatcher.dispatch({
-            actionType: ListConstants.LIST_UPDATE_COUNT,
-            increment: 1
+          dispatch({
+            type: ItemConstants.ITEM_ADD,
+            id: res.body.id,
+            title: res.body.title
           });
         } else {
           console.error(err.toString());
           console.error(res.body);
-          this.error(res.body);
         }
       });
   }
+};
 
-  save(item, text) {
+export const save = (item, title) => {
+  return (dispatch) => {
     request()
       .patch(serverURLs.list_item + item.id + "/")
-      .send({ title: text })
+      .send({title: title})
       .end((err, res) => {
         if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ItemConstants.ITEM_SAVE,
-            item: item,
-            text: res.body.title
+          dispatch({
+            type: ItemConstants.ITEM_SAVE,
+            id: item.id,
+            title: res.body.title
           });
         } else {
           console.error(err.toString());
           console.error(res.body);
-          this.error(res.body);
         }
       });
   }
+};
 
-  toggle(item) {
+export const toggle = (item) => {
+  return (dispatch) => {
     request()
       .patch(serverURLs.list_item + item.id + "/")
-      .send({ completed: !item.completed })
+      .send({completed: !item.completed})
       .end((err, res) => {
         if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ItemConstants.ITEM_TOGGLE,
-            item: item,
+          dispatch({
+            type: ItemConstants.ITEM_TOGGLE,
+            id: item.id,
           });
         } else {
           console.error(err.toString());
           console.error(res.body);
-          this.error(res.body);
         }
       });
   }
+};
 
-  toggleAll(checked) {
+export const toggleAll = (ids) => {
+  return (dispatch) => {
     request()
       .patch(serverURLs.bulk_list_item)
-      .send(ItemStore.getToogleItems(checked))
+      .send(ids)
       .end((err, res) => {
         if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ItemConstants.ITEM_TOGGLE_ALL,
-            checked: checked
+          dispatch({
+            type: ItemConstants.ITEM_TOGGLE_ALL,
+            ids: ids
           });
         } else {
           console.error(err.toString());
           console.error(res.body);
-          this.error(res.body);
         }
       });
   }
+};
 
-  destroy(item) {
+export const destroy = (item) => {
+  return (dispatch) => {
     request()
       .delete(serverURLs.list_item + item.id + "/")
       .end((err, res) => {
         if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ItemConstants.ITEM_DELETE,
-            item: item,
-          });
-          AppDispatcher.dispatch({
-            actionType: ListConstants.LIST_UPDATE_COUNT,
-            increment: -1
+          dispatch({
+            type: ItemConstants.ITEM_DELETE,
+            id: item.id,
           });
         } else {
           console.error(err.toString());
           console.error(res.body);
-          this.error(res.body);
         }
       });
   }
+};
 
-  clearCompleted() {
-    var ids = ItemStore.getCheckedItems();
+export const clearCompleted = (ids) => {
+  return (dispatch) => {
     request()
       .delete(serverURLs.bulk_list_item)
       .send(ids)
       .end((err, res) => {
         if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ItemConstants.ITEM_DELETE_COMPLETED,
-          });
-          AppDispatcher.dispatch({
-            actionType: ListConstants.LIST_UPDATE_COUNT,
-            increment: -ids.length
+          dispatch({
+            type: ItemConstants.ITEM_DELETE_COMPLETED,
+            ids: ids,
           });
         } else {
           console.error(err.toString());
           console.error(res.body);
-          this.error(res.body);
         }
       });
   }
-
-  init(id, list) {
-    AppDispatcher.dispatch({
-      actionType: ItemConstants.ITEM_INIT,
-      id: id,
-      list: list
-    });
-  }
-}
-
-const ItemAction = new ItemActions();
-
-export default ItemAction;
+};

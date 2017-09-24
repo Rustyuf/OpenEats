@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import {default as list} from '../listv2/reducers/index'
+import {default as list} from '../list/reducers/index'
 
 const reducer = combineReducers({
   list,

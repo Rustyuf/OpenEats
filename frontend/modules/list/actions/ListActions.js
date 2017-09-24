@@ -1,20 +1,22 @@
 import { request } from '../../common/CustomSuperagent';
 import { serverURLs } from '../../common/config'
-import AppDispatcher from '../../common/AppDispatcher';
 import ListConstants from '../constants/ListConstants';
+import { browserHistory } from 'react-router'
 
-class ListActions {
-  add(title) {
+export const add = (title) => {
+  return (dispatch) => {
     request()
       .post(serverURLs.list)
-      .send({ title: title })
+      .send({title: title})
       .end((err, res) => {
         if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ListConstants.LIST_ADD,
+          dispatch({
+            type: ListConstants.LIST_ADD,
             id: res.body.id,
-            title: res.body.title
+            title: res.body.title,
+            item_count: 0
           });
+          browserHistory.push('/list/' + res.body.id);
         } else {
           console.error(err.toString());
           console.error(res.body);
@@ -22,15 +24,18 @@ class ListActions {
         }
       });
   }
+};
 
-  save(id, title) {
+export const save = (id, title) => {
+  return (dispatch) => {
     request()
       .patch(serverURLs.list + id + "/")
-      .send({ title: title })
+      .send({title: title})
       .end((err, res) => {
         if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ListConstants.LIST_SAVE,
+          dispatch({
+            type: ListConstants.LIST_SAVE,
+            id: id,
             title: res.body.title
           });
         } else {
@@ -40,16 +45,19 @@ class ListActions {
         }
       });
   }
+};
 
-  destroy(id) {
+export const destroy = (id) => {
+  return (dispatch) => {
     request()
       .delete(serverURLs.list + id + "/")
       .end((err, res) => {
         if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ListConstants.LIST_DELETE,
+          dispatch({
+            type: ListConstants.LIST_DELETE,
             id: id,
           });
+          browserHistory.push('/list/');
         } else {
           console.error(err.toString());
           console.error(res.body);
@@ -57,35 +65,17 @@ class ListActions {
         }
       });
   }
+};
 
-  load(id) {
-    request()
-      .get(serverURLs.list + id + '/')
-      .end((err, res) => {
-        if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ListConstants.LIST_INIT,
-            id: res.body.id,
-            title: res.body.title,
-            item_count: res.body.item_count
-          });
-        } else {
-          console.error(err.toString());
-          console.error(res.body);
-          this.error(res.body);
-        }
-      });
-  }
-
-  init(active_list_id) {
+export const load = () => {
+  return (dispatch) => {
     request()
       .get(serverURLs.list)
       .end((err, res) => {
         if (!err && res) {
-          AppDispatcher.dispatch({
-            actionType: ListConstants.LIST_INIT,
+          dispatch({
+            type: ListConstants.LIST_INIT,
             lists: res.body.results,
-            active_list_id: active_list_id,
           });
         } else {
           console.error(err.toString());
@@ -94,8 +84,4 @@ class ListActions {
         }
       });
   }
-}
-
-const ListAction = new ListActions();
-
-export default ListAction;
+};

@@ -1,9 +1,7 @@
-"use strict";
-
 import React from 'react'
-import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { injectIntl, defineMessages } from 'react-intl'
+
+import { injectIntl, defineMessages } from 'react-intl';
 
 import { 
   ALL_ITEMS, 
@@ -11,11 +9,11 @@ import {
   COMPLETED_ITEMS 
 } from '../constants/ListStatus'
 
-class ListFooter extends React.Component {
-  render() {
+export default injectIntl(React.createClass({
+  render: function () {
     const { formatMessage } = this.props.intl;
     const messages = defineMessages({
-      itemsLeft: {
+      items_left: {
         id: 'list.footer.items_left',
         description: 'Number of items left',
         defaultMessage: '{itemCount, plural, =0 {No items} one {1 item left} other {{itemCount} items left}}',
@@ -35,22 +33,22 @@ class ListFooter extends React.Component {
         description: 'Show active items',
         defaultMessage: 'Active',
       },
-      clearCompleted: {
+      clear_completed: {
         id: 'list.footer.clear_completed',
         description: 'Clear all completed list items',
         defaultMessage: 'Clear completed',
       }
     });
 
-    let clearButton = null;
-    let {activeFilter, completedCount, onClearCompleted, itemCount, onFilterStatus} = this.props;
+    var clearButton = null;
+    var nowShowing = this.props.nowShowing;
 
-    if (completedCount > 0) {
+    if (this.props.completedCount > 0) {
       clearButton = (
         <button
           className="clear-completed clear-button"
-          onClick={ onClearCompleted }>
-          { formatMessage(messages.clearCompleted) }
+          onClick={this.props.onClearCompleted}>
+          { formatMessage(messages.clear_completed) }
         </button>
       );
     }
@@ -58,14 +56,14 @@ class ListFooter extends React.Component {
     return (
       <div className="list-footer">
         <span className="list-count">
-          { formatMessage(messages.itemsLeft, {itemCount: itemCount}) }
+          { formatMessage(messages.items_left, {itemCount: this.props.count}) }
         </span>
         <ul className="filters">
           <li>
             <a
               href="#"
-              className={ classNames({ selected: activeFilter === ALL_ITEMS })}
-              onClick={ () => { onFilterStatus(ALL_ITEMS) }}>
+              className={ classNames({ selected: nowShowing === ALL_ITEMS })}
+              onClick={ () => { this.props.filter_status(ALL_ITEMS) }}>
                 { formatMessage(messages.all) }
             </a>
           </li>
@@ -73,8 +71,8 @@ class ListFooter extends React.Component {
           <li>
             <a
               href="#"
-              className={ classNames({ selected: activeFilter === ACTIVE_ITEMS })}
-              onClick={ () => { onFilterStatus(ACTIVE_ITEMS) }}>
+              className={ classNames({ selected: nowShowing === ACTIVE_ITEMS })}
+              onClick={ () => { this.props.filter_status(ACTIVE_ITEMS) }}>
                 { formatMessage(messages.active) }
             </a>
           </li>
@@ -82,8 +80,8 @@ class ListFooter extends React.Component {
           <li>
             <a
               href="#"
-              className={ classNames({ selected: activeFilter === COMPLETED_ITEMS })}
-              onClick={ () => { onFilterStatus(COMPLETED_ITEMS) }}>
+              className={ classNames({ selected: nowShowing === COMPLETED_ITEMS })}
+              onClick={ () => { this.props.filter_status(COMPLETED_ITEMS) }}>
                 { formatMessage(messages.completed) }
             </a>
           </li>
@@ -92,15 +90,4 @@ class ListFooter extends React.Component {
       </div>
     );
   }
-}
-
-ListFooter.propTypes = {
-  itemCount: PropTypes.number.isRequired,
-  completedCount: PropTypes.number.isRequired,
-  activeFilter: PropTypes.string.isRequired,
-  onClearCompleted: PropTypes.func.isRequired,
-  onFilterStatus: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
-};
-
-export default injectIntl(ListFooter)
+}));

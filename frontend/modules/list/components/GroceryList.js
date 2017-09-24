@@ -1,60 +1,25 @@
+"use strict";
+
 import React from 'react'
 import { injectIntl, defineMessages } from 'react-intl'
 
-import AuthStore from '../../account/stores/AuthStore'
-import ListAction from '../actions/ListActions'
-import { ListStore, CHANGE_EVENT, INIT_EVENT  } from '../stores/ListStore'
-import ListContainer from '../../list/components/ListContainer'
-import MyLists from '../../list/components/MyLists'
-import ListHeader from '../../list/components/ListHeader'
-import NewList from '../../list/components/NewList'
+import ListContainer from './ListContainer'
+import MyLists from './MyLists'
+import ListHeader from './ListHeader'
+import NewList from './NewList'
 
 require("./../css/grocery_list.scss");
 
-export default injectIntl(React.createClass({
+class GroceryList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-  getInitialState: function() {
-    return {
-      lists: ListStore.get_lists() || null,
-      active_list_id: ListStore.get_id() || null,
-      active_list_name: ListStore.get_name() || null,
-    };
-  },
+  componentDidMount() {
+    this.props.listActions.load();
+  }
 
-  componentDidMount: function() {
-    ListAction.init(this.props.params.list_id);
-    ListStore.addChangeListener(CHANGE_EVENT, this._onChange);
-  },
-
-  componentWillReceiveProps(nextProps) {
-    ListAction.init(nextProps.params.list_id);
-  },
-
-  componentWillUnmount: function() {
-    ListStore.removeChangeListener(CHANGE_EVENT, this._onChange);
-  },
-
-  _onChange: function() {
-    this.setState({
-      lists: ListStore.get_lists() || null,
-      active_list_id: ListStore.get_id() || null,
-      active_list_name: ListStore.get_name() || null,
-    });
-  },
-
-  addList: function(title) {
-    ListAction.add(title);
-  },
-
-  updateList: function(title) {
-    ListAction.save(this.state.active_list_id, title);
-  },
-
-  removeList: function() {
-    ListAction.destroy(this.state.active_list_id);
-  },
-
-  render: function() {
+  render() {
     const { formatMessage } = this.props.intl;
     const messages = defineMessages({
       my_lists: {
@@ -69,25 +34,31 @@ export default injectIntl(React.createClass({
       },
     });
 
-    var render_list = '';
-    if (this.state.active_list_id != null) {
-      render_list = (
+    let { activeListID, items, lists, listActions, itemActions } = this.props;
+
+    let renderList = '';
+    if (activeListID !== null && lists.length > 0) {
+      renderList = (
         <div className="col-md-9">
           <div className="grocery-list">
             <ListHeader
-              title={ this.state.active_list_name }
-              updateList = { this.updateList }
-              removeList = { this.removeList }
+              list={ lists.find(t => t.id == activeListID) }
+              updateList = { listActions.save }
+              removeList = { listActions.destroy }
             />
-            <ListContainer list_id={ this.state.active_list_id }/>
+            <ListContainer
+              items={ items }
+              activeListID={ activeListID }
+              itemActions={ itemActions }
+            />
           </div>
           <div className="list-info-footer">{ formatMessage(messages.footer) }</div>
         </div>
       );
     } else {
-      render_list = (
+      renderList = (
         <div className="col-md-9">
-          <NewList addList={ this.addList }/>
+          <NewList addList={ listActions.add }/>
         </div>
       );
     }
@@ -95,12 +66,14 @@ export default injectIntl(React.createClass({
     return (
       <div className="container">
         <div className="row">
-          { render_list }
+          { renderList }
           <div className="col-md-3">
-            <MyLists title={ formatMessage(messages.my_lists) } data={ this.state.lists }/>
+            <MyLists title={ formatMessage(messages.my_lists) } lists={ lists }/>
           </div>
         </div>
       </div>
     );
   }
-}));
+}
+
+export default injectIntl(GroceryList)

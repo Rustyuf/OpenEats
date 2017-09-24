@@ -20,9 +20,8 @@ import Footer from './base/components/Footer'
 import NotFound from './base/components/404'
 import Login from './account/components/Login'
 import News from './news/components/News'
-import {default as listv2} from './listv2/containers/App'
+import {default as list} from './list/containers/App'
 import Browse from './browse/components/Browse'
-import GroceryList from './list/components/GroceryList'
 import { RecipeForm } from './recipe_form/components/RecipeForm'
 import { ImportForm } from './recipe_form/components/ImportForm'
 import Recipe from './recipe/components/Recipe'
@@ -48,14 +47,9 @@ const routeConfig = [
       { path: 'news', component: News },
       { path: 'login', component: Login },
       { path: 'browse', component: Browse },
-      { path: 'list', component: GroceryList, onEnter: requireAuth ,
+      { path: 'list', component: list, onEnter: requireAuth ,
         childRoutes: [
-          { path: ':list_id', component: GroceryList, onEnter: requireAuth },
-        ]
-      },
-      { path: 'list2', component: listv2, onEnter: requireAuth ,
-        childRoutes: [
-          { path: ':listId', component: listv2, onEnter: requireAuth },
+          { path: ':listId', component: list, onEnter: requireAuth },
         ]
       },
       { path: 'recipe',
