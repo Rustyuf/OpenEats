@@ -53,11 +53,11 @@ export const destroy = (id) => {
       .delete(serverURLs.list + id + "/")
       .end((err, res) => {
         if (!err && res) {
+          browserHistory.push('/list/');
           dispatch({
             type: ListConstants.LIST_DELETE,
             id: id,
           });
-          browserHistory.push('/list/');
         } else {
           console.error(err.toString());
           console.error(res.body);

@@ -1,54 +1,21 @@
 import ListConstants from '../constants/ListConstants'
 
-const list = (state, action) => {
-  switch (action.type) {
-    case ListConstants.LIST_INIT:
-      return {
-        ...action
-      };
-    case ListConstants.LIST_ADD:
-      return {
-        ...action
-      };
-    case ListConstants.LIST_SAVE:
-      if (state.id !== action.id) {
-        return state
-      }
-
-      return {
-        id: state.id,
-        title: action.title,
-        item_count: state.item_count,
-      };
-    default:
-      return state
-  }
-};
-
 const lists = (state = [], action) => {
   switch (action.type) {
     case ListConstants.LIST_INIT:
-      let lists = action.lists.map(groceryList => {
-        return list(
-          undefined,
-          {
-            type: ListConstants.LIST_INIT,
-            ...groceryList
-          }
-        )
+      return action.lists.map(groceryList => {
+        return { ...groceryList }
       });
-
-      return [
-        ...lists
-      ];
     case ListConstants.LIST_ADD:
       return [
         ...state,
-        list(undefined, action)
+        { ...action }
       ];
     case ListConstants.LIST_SAVE:
-      return state.map(t =>
-        list(t, action)
+      return state.map(list =>
+        list.id === action.id ?
+          { ...list, title: action.title } :
+          list
       );
     case ListConstants.LIST_DELETE:
       return state.filter(t => t.id !== action.id);

@@ -1,93 +1,43 @@
 import ItemConstants from '../constants/ItemConstants'
 
-const item = (state, action) => {
-  switch (action.type) {
-    case ItemConstants.ITEM_INIT:
-      return {
-        ...action
-      };
-    case ItemConstants.ITEM_ADD:
-      return {
-        id: action.id,
-        title: action.title,
-        completed: false
-      };
-    case ItemConstants.ITEM_SAVE:
-      if (state.id !== action.id) {
-        return state
-      }
-
-      return {
-        id: state.id,
-        title: action.title,
-        completed: state.completed
-      };
-    case ItemConstants.ITEM_TOGGLE:
-      if (state.id !== action.id) {
-        return state
-      }
-
-      return {
-        ...state,
-        completed: !state.completed
-      };
-    default:
-      return state
-  }
-};
-
 const items = (state = [], action) => {
   switch (action.type) {
     case ItemConstants.ITEM_INIT:
-      let items = action.list.map(listItem => {
-        return item(
-          undefined,
-          {
-            type: ItemConstants.ITEM_INIT,
-            ...listItem
-          }
-        )
+      return action.list.map(listItem => {
+        return { ...listItem }
       });
-
-      return [
-        ...items
-      ];
     case ItemConstants.ITEM_ADD:
       return [
         ...state,
-        item(undefined, action)
+        { ...action, completed: false }
       ];
     case ItemConstants.ITEM_SAVE:
-      return state.map(t =>
-        item(t, action)
+      return state.map(item =>
+        item.id === action.id ?
+          { ...item, title: action.title } :
+          item
       );
     case ItemConstants.ITEM_TOGGLE:
-      return state.map(t =>
-        item(t, action)
+      return state.map(item =>
+        item.id === action.id ?
+          { ...item, completed: !item.completed } :
+          item
       );
     case ItemConstants.ITEM_TOGGLE_ALL:
-      // TODO: FIx this mess
-      let new_State = state;
+      let ids = [];
       for (let i in action.ids) {
-        new_State = new_State.map(t =>
-          item(
-            t,
-            {
-              type: ItemConstants.ITEM_TOGGLE,
-              id: action.ids[i].id,
-            }
-          )
-        );
+        ids.push(action.ids[i].id)
       }
-      return new_State;
+
+      return state.map(item =>
+        ids.indexOf(item.id) > -1 ?
+          { ...item, completed: !item.completed } :
+          item
+      );
     case ItemConstants.ITEM_DELETE:
       return state.filter(t => t.id !== action.id);
     case ItemConstants.ITEM_DELETE_COMPLETED:
-      let newState = state;
-      for (let i in action.ids) {
-        newState = newState.filter(t => t.id !== action.ids[i]);
-      }
-      return newState;
+      return state.filter(t => !(action.ids.indexOf(t.id) > -1));
     default:
       return state
   }

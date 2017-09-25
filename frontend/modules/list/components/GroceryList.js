@@ -37,7 +37,7 @@ class GroceryList extends React.Component {
     let { activeListID, lists, listActions } = this.props;
 
     let renderList = '';
-    if (activeListID !== null && lists.length > 0) {
+    if (activeListID && lists.length > 0) {
       renderList = (
         <div className="col-md-9">
           <div className="grocery-list">
