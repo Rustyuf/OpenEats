@@ -15,10 +15,6 @@ class GroceryList extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.listActions.load();
-  }
-
   render() {
     const { formatMessage } = this.props.intl;
     const messages = defineMessages({

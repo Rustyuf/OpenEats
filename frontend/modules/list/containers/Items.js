@@ -8,14 +8,34 @@ import { connect } from 'react-redux'
 import ListContainer from '../components/ListContainer'
 import * as ItemActions from '../actions/ItemActions'
 
-let Items = ({ activeListID, items, itemActions }) => {
-  return (
-    <ListContainer
-      activeListID={ activeListID }
-      items={ items }
-      itemActions={ itemActions }
-    />
-)};
+class Items extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    if (this.props.activeListID) {
+      this.props.itemActions.load(this.props.activeListID);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.activeListID != this.props.activeListID) {
+      this.props.itemActions.load(nextProps.activeListID);
+    }
+  }
+
+  render() {
+    let { activeListID, items, itemActions } = this.props;
+    return (
+      <ListContainer
+        activeListID={ activeListID }
+        items={ items }
+        itemActions={ itemActions }
+      />
+    )
+  }
+}
 
 Items.propTypes = {
   activeListID: PropTypes.string.isRequired,

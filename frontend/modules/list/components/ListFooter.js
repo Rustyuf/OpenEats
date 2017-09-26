@@ -43,7 +43,8 @@ class ListFooter extends React.Component {
     });
 
     let clearButton = null;
-    let {activeFilter, completedCount, onClearCompleted, itemCount, onFilterStatus} = this.props;
+    let { activeFilter, completedCount, itemCount } = this.props;
+    let { onClearCompleted, onFilterStatus } = this.props;
 
     if (completedCount > 0) {
       clearButton = (

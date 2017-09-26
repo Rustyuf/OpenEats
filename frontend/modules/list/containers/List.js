@@ -8,14 +8,26 @@ import { connect } from 'react-redux'
 import GroceryList from '../components/GroceryList'
 import * as ListActions from '../actions/ListActions'
 
-let List = ({ params, lists, listActions }) => {
-  return (
-    <GroceryList
-      lists={ lists }
-      activeListID={ params.listId }
-      listActions={ listActions }
-    />
-)};
+class List extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.listActions.load();
+  }
+
+  render() {
+    let { params, lists, listActions } = this.props;
+    return (
+      <GroceryList
+        lists={ lists }
+        activeListID={ params.listId }
+        listActions={ listActions }
+      />
+    )
+  }
+}
 
 List.propTypes = {
   lists: PropTypes.array.isRequired,

@@ -24,12 +24,6 @@ class ListContainer extends React.Component {
     };
   }
 
-  componentDidMount() {
-    if (this.props.activeListID !== null) {
-      this.props.itemActions.load(this.props.activeListID);
-    }
-  }
-
   edit = (item) =>  {
     this.setState({editing: item.id});
   };
