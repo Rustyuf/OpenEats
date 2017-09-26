@@ -20,7 +20,6 @@ export const add = (title) => {
         } else {
           console.error(err.toString());
           console.error(res.body);
-          this.error(res.body);
         }
       });
   }
@@ -41,7 +40,6 @@ export const save = (id, title) => {
         } else {
           console.error(err.toString());
           console.error(res.body);
-          this.error(res.body);
         }
       });
   }
@@ -61,7 +59,6 @@ export const destroy = (id) => {
         } else {
           console.error(err.toString());
           console.error(res.body);
-          this.error(res.body);
         }
       });
   }
@@ -79,8 +76,7 @@ export const load = () => {
           });
         } else {
           console.error(err.toString());
-          console.error(res.body);
-          this.error(res.body);
+          // console.error(res.body);
         }
       });
   }

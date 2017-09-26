@@ -6,17 +6,15 @@ export const load = (list) => {
   return (dispatch) => {
     request()
       .get(serverURLs.list_item + '?list=' + list)
-      .end((err, res) => {
-        if (!err && res) {
-          dispatch({
-            type: ItemConstants.ITEM_INIT,
-            list: res.body.results
-          });
-        } else {
-          console.error(err.toString());
-          console.error(res.body);
-        }
-      });
+      .then(res => {
+        dispatch({
+          type: ItemConstants.ITEM_INIT,
+          list: res.body.results
+        })
+      })
+      .catch(err => {
+        console.log(err.toString());
+      })
   }
 };
 
