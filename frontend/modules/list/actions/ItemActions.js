@@ -80,7 +80,17 @@ export const toggle = (id, completed) => {
   }
 };
 
-export const toggleAll = (ids) => {
+export const toggleAll = (items, event) => {
+  let ids = items.reduce(function (list, item) {
+    if (item.completed !== event.target.checked) {
+      list.push({
+        id: item.id,
+        completed: event.target.checked
+      });
+    }
+    return list;
+  }, []);
+
   return (dispatch) => {
     request()
       .patch(serverURLs.bulk_list_item)
@@ -117,7 +127,14 @@ export const destroy = (id) => {
   }
 };
 
-export const clearCompleted = (ids) => {
+export const clearCompleted = (items) => {
+  let ids = items.reduce(function (list, item) {
+    if (item.completed === true) {
+      list.push(item.id);
+    }
+    return list;
+  }, []);
+
   return (dispatch) => {
     request()
       .delete(serverURLs.bulk_list_item)

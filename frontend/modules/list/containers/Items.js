@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import ListContainer from '../components/ListContainer'
+import ListItems from '../components/ListItems'
 import * as ItemActions from '../actions/ItemActions'
 
 class Items extends React.Component {
@@ -28,7 +28,7 @@ class Items extends React.Component {
   render() {
     let { activeListID, items, itemActions } = this.props;
     return (
-      <ListContainer
+      <ListItems
         activeListID={ activeListID }
         items={ items }
         itemActions={ itemActions }

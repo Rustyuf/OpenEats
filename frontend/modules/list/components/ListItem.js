@@ -23,6 +23,7 @@ class ListItem extends React.Component {
     let val = this.state.title.trim();
     if (val) {
       this.props.onSave(val);
+      this.props.onToggleEdit(null);
       this.setState({title: val});
     } else {
       this.handleDestroy();
@@ -30,7 +31,7 @@ class ListItem extends React.Component {
   };
 
   handleEdit = () => {
-    this.props.onEdit();
+    this.props.onToggleEdit(this.props.item.id);
     this.setState({title: this.props.item.title});
   };
 
@@ -41,7 +42,7 @@ class ListItem extends React.Component {
   handleKeyDown = (event) => {
     if (event.which === ESCAPE_KEY) {
       this.setState({title: this.props.item.title});
-      this.props.onCancel(event);
+      this.props.onToggleEdit(null);
     } else if (event.which === ENTER_KEY) {
       this.handleSubmit(event);
     }
@@ -98,9 +99,8 @@ ListItem.propTypes = {
     completed: PropTypes.bool.isRequired
   }).isRequired,
   onSave: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired,
   onDestroy: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired,
+  onToggleEdit: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
 };
 

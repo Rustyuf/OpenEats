@@ -11,10 +11,6 @@ import NewList from './NewList'
 require("./../css/grocery_list.scss");
 
 class GroceryList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { formatMessage } = this.props.intl;
     const messages = defineMessages({

@@ -10,11 +10,10 @@ import AddItem from './AddItem'
 import {
   ALL_ITEMS,
   ACTIVE_ITEMS,
-  COMPLETED_ITEMS,
-  ENTER_KEY
+  COMPLETED_ITEMS
 } from '../constants/ListStatus'
 
-class ListContainer extends React.Component {
+class ListItems extends React.Component {
   constructor(props) {
     super(props);
 
@@ -24,54 +23,12 @@ class ListContainer extends React.Component {
     };
   }
 
-  edit = (item) =>  {
-    this.setState({editing: item.id});
-  };
-
-  save = (itemToSave, text) => {
-    this.props.itemActions.save(itemToSave, text);
-    this.setState({editing: null});
-  };
-
-  cancel = () =>  {
-    this.setState({editing: null});
+  toggleEdit = (id) =>  {
+    this.setState({editing: id});
   };
 
   filterStatus = (status) =>  {
     this.setState({nowShowing: status});
-  };
-
-  toggleAll = (event) => {
-    this.props.itemActions.toggleAll(
-      this.getToogleItems(event.target.checked)
-    );
-  };
-
-  getCheckedItems = () => {
-    return this.props.items.reduce(function (list, item) {
-      if (item.completed === true) {
-        list.push(item.id);
-      }
-      return list;
-    }, []);
-  };
-
-  getToogleItems = (checked) =>  {
-    return this.props.items.reduce(function (list, item) {
-      if (item.completed !== checked) {
-        list.push({
-          id: item.id,
-          completed: checked
-        });
-      }
-      return list;
-    }, []);
-  };
-
-  clearCompleted = () => {
-    this.props.itemActions.clearCompleted(
-      this.getCheckedItems()
-    );
   };
 
   render() {
@@ -95,12 +52,11 @@ class ListContainer extends React.Component {
         <ListItem
           key={ item.id }
           item={ item }
+          editing={ this.state.editing === item.id }
           onToggle={ this.props.itemActions.toggle }
           onDestroy={ this.props.itemActions.destroy }
-          onEdit={ this.edit.bind(this, item) }
-          editing={ this.state.editing === item.id }
-          onSave={ this.save.bind(this, item) }
-          onCancel={ this.cancel}
+          onToggleEdit={ this.toggleEdit }
+          onSave={ this.props.itemActions.save.bind(this, item) }
         />
       );
     }, this);
@@ -117,7 +73,7 @@ class ListContainer extends React.Component {
           itemCount={ activeListCount }
           completedCount={ completedCount }
           activeFilter={ this.state.nowShowing }
-          onClearCompleted={ this.clearCompleted }
+          onClearCompleted={ this.props.itemActions.clearCompleted.bind(this, items) }
           onFilterStatus={ this.filterStatus }
         />;
     }
@@ -128,7 +84,7 @@ class ListContainer extends React.Component {
           <input
             className="toggle-all"
             type="checkbox"
-            onChange={ this.toggleAll }
+            onChange={ this.props.itemActions.toggleAll.bind(this, items) }
             checked={ activeListCount === 0 }
           />
           <ul className="item-list">
@@ -153,4 +109,4 @@ class ListContainer extends React.Component {
   }
 }
 
-export default injectIntl(ListContainer)
+export default injectIntl(ListItems)
