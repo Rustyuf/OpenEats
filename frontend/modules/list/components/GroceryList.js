@@ -1,12 +1,14 @@
 "use strict";
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import { injectIntl, defineMessages } from 'react-intl'
 
 import Items from '../Containers/Items'
 import MyLists from './MyLists'
 import ListHeader from './ListHeader'
 import NewList from './NewList'
+import Error from './Error'
 
 require("./../css/grocery_list.scss");
 
@@ -31,7 +33,7 @@ class GroceryList extends React.Component {
     let renderList = '';
     if (activeListID && lists.length > 0) {
       renderList = (
-        <div className="col-md-9">
+        <div>
           <div className="grocery-list">
             <ListHeader
               list={ lists.find(t => t.id == activeListID) }
@@ -45,16 +47,17 @@ class GroceryList extends React.Component {
       );
     } else {
       renderList = (
-        <div className="col-md-9">
-          <NewList addList={ listActions.add }/>
-        </div>
+        <NewList addList={ listActions.add }/>
       );
     }
 
     return (
       <div className="container">
         <div className="row">
-          { renderList }
+          <div className="col-md-9">
+            { this.props.error ? <Error message={ this.props.error }/> : '' }
+            { renderList }
+          </div>
           <div className="col-md-3">
             <MyLists title={ formatMessage(messages.my_lists) } lists={ lists }/>
           </div>
