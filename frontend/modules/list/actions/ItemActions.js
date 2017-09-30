@@ -41,16 +41,16 @@ export const add = (title, list) => {
   }
 };
 
-export const save = (item, title) => {
+export const save = (id, title) => {
   return (dispatch) => {
     request()
-      .patch(serverURLs.list_item + item.id + "/")
+      .patch(serverURLs.list_item + id + "/")
       .send({title: title})
       .end((err, res) => {
         if (!err && res) {
           dispatch({
             type: ItemConstants.ITEM_SAVE,
-            id: item.id,
+            id: id,
             title: res.body.title
           });
         } else {

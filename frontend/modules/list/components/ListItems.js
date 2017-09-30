@@ -53,10 +53,10 @@ class ListItems extends React.Component {
           key={ item.id }
           item={ item }
           editing={ this.state.editing === item.id }
+          onToggleEdit={ this.toggleEdit }
           onToggle={ this.props.itemActions.toggle }
           onDestroy={ this.props.itemActions.destroy }
-          onToggleEdit={ this.toggleEdit }
-          onSave={ this.props.itemActions.save.bind(this, item) }
+          onSave={ this.props.itemActions.save }
         />
       );
     }, this);

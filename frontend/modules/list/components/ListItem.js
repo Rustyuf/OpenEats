@@ -22,7 +22,7 @@ class ListItem extends React.Component {
   handleSubmit = (event) => {
     let val = this.state.title.trim();
     if (val) {
-      this.props.onSave(val);
+      this.props.onSave(this.props.item.id, val);
       this.props.onToggleEdit(null);
       this.setState({title: val});
     } else {
