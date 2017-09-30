@@ -37,6 +37,7 @@ List.propTypes = {
 
 const mapStateToProps = state => ({
   lists: state.list.lists,
+  error: state.list.error,
 });
 
 const mapDispatchToProps = dispatch => ({
