@@ -58,7 +58,7 @@ class GroceryList extends React.Component {
             { error ? <Error message={ error }/> : '' }
             { renderList }
           </div>
-          <div className="col-md-3">
+          <div className="col-md-3 hidden-xs">
             <MyLists title={ formatMessage(messages.my_lists) } lists={ lists }/>
           </div>
         </div>
