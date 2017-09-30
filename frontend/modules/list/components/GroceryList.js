@@ -28,7 +28,7 @@ class GroceryList extends React.Component {
       },
     });
 
-    let { activeListID, lists, listActions } = this.props;
+    let { activeListID, lists, listActions, error } = this.props;
 
     let renderList = '';
     if (activeListID && lists.length > 0) {
@@ -55,7 +55,7 @@ class GroceryList extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-md-9">
-            { this.props.error ? <Error message={ this.props.error }/> : '' }
+            { error ? <Error message={ error }/> : '' }
             { renderList }
           </div>
           <div className="col-md-3">
@@ -66,5 +66,17 @@ class GroceryList extends React.Component {
     );
   }
 }
+
+GroceryList.propTypes = {
+  lists: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    item_count: PropTypes.number.isRequired
+  }).isRequired).isRequired,
+  error: PropTypes.string,
+  activeListID: PropTypes.string,
+  listActions: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
+};
 
 export default injectIntl(GroceryList)

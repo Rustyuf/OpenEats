@@ -110,4 +110,15 @@ class ListItems extends React.Component {
   }
 }
 
+ListItems.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired
+  }).isRequired).isRequired,
+  activeListID: PropTypes.string,
+  itemActions: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
+};
+
 export default injectIntl(ListItems)
