@@ -28,7 +28,6 @@
     "flux": "^3.1.0",
     "glob": "^7.1.1",
     "if-env": "^1.0.0",
-    "immutable": "^3.8.1",
     "json-loader": "^0.5.4",
     "keymirror": "^0.1.1",
     "mkdirp": "^0.5.1",
