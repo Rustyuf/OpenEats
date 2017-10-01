@@ -3,7 +3,7 @@ import ItemConstants from '../constants/ItemConstants'
 const items = (state = [], action) => {
   switch (action.type) {
     case ItemConstants.ITEM_INIT:
-      return action.list.map(listItem => {
+      return action.items.map(listItem => {
         return { ...listItem }
       });
     case ItemConstants.ITEM_ADD:

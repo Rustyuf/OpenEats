@@ -9,11 +9,12 @@ export const load = (list) => {
       .then(res => {
         dispatch({
           type: ItemConstants.ITEM_INIT,
-          list: res.body.results
+          list: list,
+          items: res.body.results
         })
       })
       .catch(err => {
-        console.log(err.toString());
+        console.error(err.toString());
       })
   }
 };
@@ -30,6 +31,7 @@ export const add = (title, list) => {
         if (!err && res) {
           dispatch({
             type: ItemConstants.ITEM_ADD,
+            list: list,
             id: res.body.id,
             title: res.body.title
           });
@@ -41,7 +43,7 @@ export const add = (title, list) => {
   }
 };
 
-export const save = (id, title) => {
+export const save = (id, title, list) => {
   return (dispatch) => {
     request()
       .patch(serverURLs.list_item + id + "/")
@@ -50,6 +52,7 @@ export const save = (id, title) => {
         if (!err && res) {
           dispatch({
             type: ItemConstants.ITEM_SAVE,
+            list: list,
             id: id,
             title: res.body.title
           });
@@ -61,7 +64,7 @@ export const save = (id, title) => {
   }
 };
 
-export const toggle = (id, completed) => {
+export const toggle = (id, completed, list) => {
   return (dispatch) => {
     request()
       .patch(serverURLs.list_item + id + "/")
@@ -70,6 +73,7 @@ export const toggle = (id, completed) => {
         if (!err && res) {
           dispatch({
             type: ItemConstants.ITEM_TOGGLE,
+            list: list,
             id: id,
           });
         } else {
@@ -80,7 +84,7 @@ export const toggle = (id, completed) => {
   }
 };
 
-export const toggleAll = (items, event) => {
+export const toggleAll = (items, event, list) => {
   let ids = items.reduce(function (list, item) {
     if (item.completed !== event.target.checked) {
       list.push({
@@ -99,6 +103,7 @@ export const toggleAll = (items, event) => {
         if (!err && res) {
           dispatch({
             type: ItemConstants.ITEM_TOGGLE_ALL,
+            list: list,
             ids: ids
           });
         } else {
@@ -109,7 +114,7 @@ export const toggleAll = (items, event) => {
   }
 };
 
-export const destroy = (id) => {
+export const destroy = (id, list) => {
   return (dispatch) => {
     request()
       .delete(serverURLs.list_item + id + "/")
@@ -118,6 +123,7 @@ export const destroy = (id) => {
           dispatch({
             type: ItemConstants.ITEM_DELETE,
             id: id,
+            list: list,
           });
         } else {
           console.error(err.toString());
@@ -127,7 +133,7 @@ export const destroy = (id) => {
   }
 };
 
-export const clearCompleted = (items) => {
+export const clearCompleted = (items, list) => {
   let ids = items.reduce(function (list, item) {
     if (item.completed === true) {
       list.push(item.id);
@@ -143,6 +149,7 @@ export const clearCompleted = (items) => {
         if (!err && res) {
           dispatch({
             type: ItemConstants.ITEM_DELETE_COMPLETED,
+            list: list,
             ids: ids,
           });
         } else {

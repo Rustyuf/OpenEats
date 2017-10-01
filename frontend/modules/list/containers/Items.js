@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
+import bindIndexToActionCreators from '../../common/bindIndexToActionCreators'
 import ListItems from '../components/ListItems'
 import * as ItemActions from '../actions/ItemActions'
 
@@ -43,12 +44,24 @@ Items.propTypes = {
   itemActions: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-  items: state.list.items,
+const getItemsFromList = (lists, listId) => {
+  let list = lists.find(t => t.id == listId);
+  if (list) {
+    return list.items
+  }
+
+  return []
+};
+
+const mapStateToProps = (state, props) => ({
+  items: getItemsFromList(state.list.lists, props.activeListID)
 });
 
-const mapDispatchToProps = dispatch => ({
-  itemActions: bindActionCreators(ItemActions, dispatch),
+const mapDispatchToProps = (dispatch, props) => ({
+  itemActions: bindActionCreators(
+    bindIndexToActionCreators(ItemActions, props.activeListID),
+    dispatch
+  ),
 });
 
 export default connect(

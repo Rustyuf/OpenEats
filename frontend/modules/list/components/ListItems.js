@@ -98,10 +98,7 @@ class ListItems extends React.Component {
     return (
       <div>
         <header className="header">
-          <AddItem
-            activeListID={ this.props.activeListID }
-            addItem={ this.props.itemActions.add }
-          />
+          <AddItem addItem={ this.props.itemActions.add }/>
         </header>
         { main }
         { footer }

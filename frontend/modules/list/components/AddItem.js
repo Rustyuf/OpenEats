@@ -29,7 +29,7 @@ class AddItem extends React.Component {
     event.preventDefault();
     let val = this.state.title.trim();
     if (val) {
-      this.props.addItem(val, this.props.activeListID);
+      this.props.addItem(val);
       this.setState({title: ''});
     }
   };
@@ -58,7 +58,6 @@ class AddItem extends React.Component {
 }
 
 AddItem.propTypes = {
-  activeListID: PropTypes.string.isRequired,
   addItem: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired
 };
