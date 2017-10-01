@@ -32,7 +32,7 @@ class GroceryList extends React.Component {
 
     let renderList = '';
     let list = lists.find(t => t.id == activeListID);
-    if (activeListID && lists.length > 0 && list) {
+    if (activeListID && list) {
       renderList = (
         <div>
           <div className="grocery-list">
