@@ -31,12 +31,13 @@ class GroceryList extends React.Component {
     let { activeListID, lists, listActions, error } = this.props;
 
     let renderList = '';
-    if (activeListID && lists.length > 0) {
+    let list = lists.find(t => t.id == activeListID);
+    if (activeListID && lists.length > 0 && list) {
       renderList = (
         <div>
           <div className="grocery-list">
             <ListHeader
-              list={ lists.find(t => t.id == activeListID) }
+              list={ list }
               updateList = { listActions.save }
               removeList = { listActions.destroy }
             />

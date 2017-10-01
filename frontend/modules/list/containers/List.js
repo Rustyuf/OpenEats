@@ -4,6 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 
 import GroceryList from '../components/GroceryList'
 import * as ListActions from '../actions/ListActions'
@@ -15,6 +16,14 @@ class List extends React.Component {
 
   componentDidMount() {
     this.props.listActions.load();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.lists.length > 0 && nextProps.params.listId) {
+      if (!(nextProps.lists.find(t => t.id == nextProps.params.listId))) {
+        browserHistory.push('/list/');
+      }
+    }
   }
 
   render() {
