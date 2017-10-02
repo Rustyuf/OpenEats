@@ -15,7 +15,7 @@ class List extends React.Component {
   }
 
   componentDidMount() {
-    this.props.listActions.load(this.props.params.listId);
+    this.props.listActions.load();
   }
 
   componentWillReceiveProps(nextProps) {

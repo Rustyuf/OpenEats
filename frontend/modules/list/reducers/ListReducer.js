@@ -6,7 +6,9 @@ const lists = (state = [], action) => {
   switch (action.type) {
     case ListConstants.LIST_INIT:
       return action.lists.map(list => {
-        return { ...list, items: [] }
+        let items = state.find(t => t.id === list.id);
+        items = items ? items.items : [];
+        return {...list, items: items}
       });
     case ListConstants.LIST_ADD:
       return [
