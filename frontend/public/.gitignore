@@ -4,3 +4,5 @@
 *.ttf
 *.eot
 *.woff
+
+!images/*
