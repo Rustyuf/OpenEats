@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl, defineMessages } from 'react-intl'
 
-import Items from '../Containers/Items'
+import Items from '../containers/Items'
 import MyLists from './MyLists'
 import ListHeader from './ListHeader'
 import NewList from './NewList'
