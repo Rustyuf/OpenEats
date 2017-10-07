@@ -29,6 +29,7 @@ class RecipeScheme extends React.Component {
     this.showRecipeImageThumb = this.showRecipeImageThumb.bind(this);
     this.showEditLink = this.showEditLink.bind(this);
     this.getDomain = this.getDomain.bind(this);
+    this.round = this.round.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -50,23 +51,30 @@ class RecipeScheme extends React.Component {
         data.ingredient_groups.map((ingredient_group) => {
           ingredient_group.ingredients.map((ingredient) => {
             if (ingredient) {
-              ingredient.quantity = ingredient.quantity * multiplier;
+              ingredient.quantity = this.round(ingredient.quantity * multiplier);
             }
             return ingredient
           });
-        });
+        }, this);
 
         data.subrecipes.map((ingredient) => {
           if (ingredient) {
-            ingredient.quantity = ingredient.quantity * multiplier;
+            ingredient.quantity = this.round(ingredient.quantity * multiplier);
           }
-        });
+        }, this);
 
         this.setState({
           data: data
         })
       }
     }
+  }
+
+  round(number) {
+    let factor = Math.pow(10, 3);
+    let tempNumber = number * factor;
+    let roundedTempNumber = Math.round(tempNumber);
+    return roundedTempNumber / factor;
   }
 
   showRecipeImageHeader() {
