@@ -25,7 +25,7 @@ import List from './list/containers/List'
 import Browse from './browse/components/Browse'
 import { RecipeForm } from './recipe_form/components/RecipeForm'
 import { ImportForm } from './recipe_form/components/ImportForm'
-import Recipe from './recipe/components/Recipe'
+import Recipe from './recipe/containers/Recipe'
 
 // Load required polyfills
 import {
