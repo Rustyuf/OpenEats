@@ -2,7 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router-dom'
 import { injectIntl, defineMessages } from 'react-intl'
 
 const MyLists = ({title, lists, intl}) => {
@@ -37,7 +37,7 @@ const MyLists = ({title, lists, intl}) => {
   let items = lists.map(function(item) {
     let link = '/list/' + item.id;
     return (
-      <Link
+      <NavLink
         to={ link }
         className="list-group-item"
         activeClassName="active"
@@ -45,7 +45,7 @@ const MyLists = ({title, lists, intl}) => {
       >
         <span className="badge">{ item.item_count }</span>
         { item.title }
-      </Link>
+      </NavLink>
     );
   });
 
@@ -56,9 +56,9 @@ const MyLists = ({title, lists, intl}) => {
           { title }
         </a>
         { items }
-        <Link to={ '/list/' } className="list-group-item">
+        <NavLink exact={ true } to={ '/list/' } className="list-group-item">
           { intl.formatMessage(messages.new_list) }
-        </Link>
+        </NavLink>
       </ul>
     </div>
   );

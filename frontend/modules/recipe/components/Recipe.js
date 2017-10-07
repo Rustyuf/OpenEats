@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, browserHistory } from 'react-router'
+import { Link } from 'react-router-dom'
 import { request } from '../../common/CustomSuperagent';
 import {
     injectIntl,
@@ -39,7 +39,7 @@ class Recipe extends React.Component {
           this.setState({ data: res.body });
         } else {
           if (res.statusCode == 404) {
-            browserHistory.replace('/notfound');
+            this.props.history.replace('/notfound');
           } else {
             console.error(url, err.toString());
           }
@@ -49,7 +49,7 @@ class Recipe extends React.Component {
 
   componentDidMount() {
     AuthStore.addChangeListener(this._onChange);
-    this.loadRecipeFromServer(this.props.params.recipe);
+    this.loadRecipeFromServer(this.props.match.params.recipe);
   }
 
   componentWillUnmount() {
@@ -57,7 +57,7 @@ class Recipe extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.loadRecipeFromServer(nextProps.params.recipe);
+    this.loadRecipeFromServer(nextProps.match.params.recipe);
   }
 
   _onChange() {

@@ -4,8 +4,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { browserHistory } from 'react-router'
 
+import authCheckRedirect from '../../common/authCheckRedirect'
 import GroceryList from '../components/GroceryList'
 import * as ListActions from '../actions/ListActions'
 
@@ -15,23 +15,24 @@ class List extends React.Component {
   }
 
   componentDidMount() {
+    authCheckRedirect();
     this.props.listActions.load();
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.lists.length > 0 && nextProps.params.listId) {
-      if (!(nextProps.lists.find(t => t.id == nextProps.params.listId))) {
-        browserHistory.push('/list/');
+    if (nextProps.lists.length > 0 && nextProps.match.params.listId) {
+      if (!(nextProps.lists.find(t => t.id == nextProps.match.params.listId))) {
+        this.props.history.push('/list/');
       }
     }
   }
 
   render() {
-    let { params, lists, listActions } = this.props;
+    let { match, lists, listActions } = this.props;
     return (
       <GroceryList
         lists={ lists }
-        activeListID={ params.listId }
+        activeListID={ match.params.listId }
         listActions={ listActions }
       />
     )
@@ -40,7 +41,7 @@ class List extends React.Component {
 
 List.propTypes = {
   lists: PropTypes.array.isRequired,
-  params: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
   listActions: PropTypes.object.isRequired,
 };
 

@@ -133,7 +133,7 @@ export const destroy = (id, list) => {
   }
 };
 
-export const clearCompleted = (items, list) => {
+export const clearCompleted = (items, event, list) => {
   let ids = items.reduce(function (list, item) {
     if (item.completed === true) {
       list.push(item.id);
