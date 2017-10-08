@@ -48,12 +48,14 @@ class Recipe extends React.Component {
     let data = this.props.recipes.find(t => t.id == this.props.match.params.recipe);
 
     if (data) {
+      let showEditLink = (this.state.user !== null && this.state.user.id === data.author);
       return (
         <div className="container">
           <div className="row">
             <div className="col-md-9">
               <RecipeScheme
                 data={ data }
+                showEditLink={ showEditLink }
                 user={ this.state.user }
               />
             </div>
