@@ -25,8 +25,7 @@ class RecipeScheme extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (this.props.data.id !== nextProps.data.id) {
       return true;
-    }
-    if (this.state.data.servings !== nextState.data.servings) {
+    } else if (this.state.data.servings !== nextState.data.servings) {
       return true;
     }
 
